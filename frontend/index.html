@@ -41,6 +41,9 @@
             </ul>
             
             <div class="sidebar-footer">
+                <button class="btn btn--primary btn--full-width" id="login-btn">Login</button>
+                <button class="btn btn--secondary btn--full-width" id="logout-btn" style="display: none; margin-top: 10px;">Logout</button>
+                <hr style="margin-top: 15px; margin-bottom: 15px; border-color: var(--color-border);">
                 <button class="btn btn--primary btn--full-width" id="new-incident-btn">
                     ð¨ Nouveau Incident
                 </button>
@@ -627,5 +630,32 @@
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="app.js"></script>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Connexion</h3>
+                <button class="modal-close" id="close-login-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="login-form">
+                    <div id="login-error-message" class="form-error-message" style="color: var(--color-error); margin-bottom: var(--space-16); text-align: center; display: none;"></div>
+                    <div class="form-group">
+                        <label class="form-label" for="login-email">Email</label>
+                        <input type="email" id="login-email" class="form-control" placeholder="Votre email..." required autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="login-password">Mot de passe</label>
+                        <input type="password" id="login-password" class="form-control" placeholder="Votre mot de passe..." required autocomplete="current-password">
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn--secondary" id="cancel-login-modal">Annuler</button>
+                        <button type="submit" class="btn btn--primary">Se connecter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

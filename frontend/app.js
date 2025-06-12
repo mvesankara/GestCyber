@@ -295,8 +295,59 @@ let mainCourante = [
 let currentPage = 'dashboard';
 let filteredActions = [...actions];
 
+function updateUIForLoggedInState() {
+    const token = localStorage.getItem('gestcyber_token');
+    const loginBtn = document.getElementById('login-btn');
+    const logoutBtn = document.getElementById('logout-btn');
+    const newIncidentBtn = document.getElementById('new-incident-btn');
+    const userInfoDisplay = document.getElementById('user-info-display'); // Get the display element
+
+    if (token) {
+        // User is logged in
+        if (loginBtn) loginBtn.style.display = 'none';
+        if (logoutBtn) logoutBtn.style.display = 'block';
+        if (newIncidentBtn) newIncidentBtn.disabled = false;
+        // User info display will be populated by checkAuthStateOnLoad.
+        // Here, we just ensure it's not accidentally cleared if it was set.
+    } else {
+        // User is logged out
+        if (loginBtn) loginBtn.style.display = 'block';
+        if (logoutBtn) logoutBtn.style.display = 'none';
+        if (newIncidentBtn) newIncidentBtn.disabled = true;
+
+        // Clear user info display when logging out or if no token
+        if (userInfoDisplay) {
+            userInfoDisplay.innerHTML = '';
+            // If userInfoDisplay was dynamically added, you might prefer:
+            // if (userInfoDisplay.parentElement) userInfoDisplay.parentElement.removeChild(userInfoDisplay);
+            // But if it's a permanent div that's just filled, clearing innerHTML is fine.
+            // The current checkAuthStateOnLoad appends it, so removing it might be cleaner if it doesn't exist in HTML.
+            // For now, assuming it's created by checkAuthStateOnLoad, it might be better to remove it.
+            // Let's stick to removing if it was dynamically created by checkAuthStateOnLoad
+            if (userInfoDisplay.parentElement && userInfoDisplay.id === 'user-info-display') { // ensure it is the one we created
+                 // userInfoDisplay.remove(); // This would require checkAuthStateOnLoad to always recreate it.
+                                       // Simpler: just clear its content. checkAuthStateOnLoad will repopulate or create.
+                userInfoDisplay.innerHTML = '';
+            }
+        }
+        // Clear dashboard incidents (already handled in logout event, but good for consistency if called elsewhere)
+        const timelineContainer = document.querySelector('#dashboard .timeline-recent .timeline');
+        if (timelineContainer && !timelineContainer.querySelector('p')?.textContent.includes('Veuillez vous connecter')) {
+             timelineContainer.innerHTML = '<p>Veuillez vous connecter pour voir les incidents.</p>';
+        }
+    }
+}
+
 // Initialisation
 document.addEventListener('DOMContentLoaded', function() {
+    const loginBtn = document.getElementById('login-btn'); // Already defined in previous step
+    const logoutBtn = document.getElementById('logout-btn'); // Get the logout button
+    const loginModal = document.getElementById('login-modal'); // Already defined
+    const loginForm = document.getElementById('login-form');
+    const loginErrorMessage = document.getElementById('login-error-message');
+    // const crisisStatusDiv = document.getElementById('crisis-status'); // Example element to update user info
+    // const sidebarHeader = document.querySelector('.sidebar-header'); // Example
+
     initializeNavigation();
     initializeModals();
     updateCrisisTimer();
@@ -311,6 +362,210 @@ document.addEventListener('DOMContentLoaded', function() {
     if (document.getElementById('dashboard').classList.contains('active')) {
         loadDashboardData();
     }
+
+    // Login Modal Toggling Logic
+    const loginModal = document.getElementById('login-modal');
+    const loginBtn = document.getElementById('login-btn');
+    const closeLoginModalBtn = document.getElementById('close-login-modal');
+    const cancelLoginModalBtn = document.getElementById('cancel-login-modal');
+
+    if (loginBtn) {
+        loginBtn.addEventListener('click', () => {
+            if (loginModal) loginModal.classList.add('show');
+        });
+    }
+
+    if (closeLoginModalBtn) {
+        closeLoginModalBtn.addEventListener('click', () => {
+            if (loginModal) loginModal.classList.remove('show');
+            if (loginErrorMessage) loginErrorMessage.style.display = 'none'; // Clear error
+        });
+    }
+
+    if (cancelLoginModalBtn) {
+        cancelLoginModalBtn.addEventListener('click', () => {
+            if (loginModal) loginModal.classList.remove('show');
+            if (loginErrorMessage) loginErrorMessage.style.display = 'none'; // Clear error
+        });
+    }
+
+    if (loginModal) {
+        loginModal.addEventListener('click', (e) => {
+            if (e.target === loginModal) {
+                loginModal.classList.remove('show');
+                if (loginErrorMessage) loginErrorMessage.style.display = 'none'; // Clear error
+            }
+        });
+    }
+    // End of Login Modal Toggling Logic
+
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (loginErrorMessage) loginErrorMessage.style.display = 'none'; // Clear previous errors
+
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            if (!email || !password) {
+                if (loginErrorMessage) {
+                    loginErrorMessage.textContent = 'Veuillez saisir votre email et mot de passe.';
+                    loginErrorMessage.style.display = 'block';
+                }
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    if (loginErrorMessage) {
+                        loginErrorMessage.textContent = data.msg || 'Échec de la connexion. Vérifiez vos identifiants.';
+                        loginErrorMessage.style.display = 'block';
+                    }
+                    return;
+                }
+
+                // Successful login
+                if (data.token) {
+                    localStorage.setItem('gestcyber_token', data.token);
+                    showNotification('Connexion réussie !', 'success');
+                    if (loginModal) loginModal.classList.remove('show');
+                    loginForm.reset();
+                    updateUIForLoggedInState(); // Function to update UI (show/hide buttons etc.)
+                    loadDashboardData(); // Refresh dashboard data
+                } else {
+                     if (loginErrorMessage) {
+                        loginErrorMessage.textContent = 'Token non reçu du serveur.';
+                        loginErrorMessage.style.display = 'block';
+                    }
+                }
+
+            } catch (error) {
+                console.error('Login error:', error);
+                if (loginErrorMessage) {
+                    loginErrorMessage.textContent = 'Erreur de connexion au serveur. Veuillez réessayer.';
+                    loginErrorMessage.style.display = 'block';
+                }
+            }
+        });
+    }
+    updateUIForLoggedInState(); // Set initial UI state based on token presence
+
+    // Logout Button Event Listener
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('gestcyber_token'); // Remove the token
+            showNotification('Déconnexion réussie.', 'info'); // Corrected: Déconnexion réussie.
+            updateUIForLoggedInState(); // Update UI to logged-out state
+
+            // Clear dashboard incidents or reset to a default logged-out view
+            const timelineContainer = document.querySelector('#dashboard .timeline-recent .timeline');
+            if (timelineContainer) {
+                timelineContainer.innerHTML = '<p>Veuillez vous connecter pour voir les incidents.</p>'; // Corrected: Veuillez vous connecter...
+            } else {
+                // If the specific container isn't found, you might want a more general way
+                // to signal that the dashboard needs to be cleared or re-rendered for a logged-out state.
+                // For now, this targets the known structure.
+                const statusOverviewCardBody = document.querySelector('#dashboard .status-overview .card__body');
+                if (statusOverviewCardBody) {
+                    statusOverviewCardBody.innerHTML = '<p style="text-align: center;">Veuillez vous connecter.</p>';
+                }
+            }
+
+            // Optionally, if other parts of the UI show user-specific data, clear them here.
+            // For example, if a user's name/email was displayed in the sidebar:
+            // const userInfoDisplay = document.getElementById('user-info-display');
+            // if (userInfoDisplay) {
+            //    userInfoDisplay.remove();
+            // }
+
+            // If login modal is not automatically shown by updateUIForLoggedInState,
+            // you might want to explicitly show it here or ensure loginBtn is clickable.
+            // loginModal.classList.add('show'); // Or rely on user clicking loginBtn
+        });
+    }
+
+    async function checkAuthStateOnLoad() {
+        const token = localStorage.getItem('gestcyber_token');
+        const loginModal = document.getElementById('login-modal'); // Ensure it's defined
+
+        if (token) {
+            console.log('Token found on load, verifying...');
+            try {
+                const response = await fetch(`${API_BASE_URL}/auth/me`, {
+                    method: 'GET',
+                    headers: {
+                        'x-auth-token': token
+                    }
+                });
+
+                if (response.ok) {
+                    const user = await response.json();
+                    console.log('Token valid. User authenticated:', user);
+                    // User is authenticated and token is valid
+                    updateUIForLoggedInState(); // Ensure UI is in logged-in state
+                    loadDashboardData(); // Load initial data for logged-in user
+
+                    // Optionally, display user information (e.g., in sidebar)
+                    // This is an enhanced version of the commented-out code in updateUIForLoggedInState
+                    const sidebarHeader = document.querySelector('.sidebar-header');
+                    let userInfoSpan = document.getElementById('user-info-display');
+                    if (!userInfoSpan && sidebarHeader) {
+                        userInfoSpan = document.createElement('div'); // Use div for better block layout
+                        userInfoSpan.id = 'user-info-display';
+                        userInfoSpan.style.fontSize = 'var(--font-size-sm)';
+                        userInfoSpan.style.color = 'var(--color-text-secondary)';
+                        userInfoSpan.style.marginTop = 'var(--space-8)';
+                        userInfoSpan.style.borderTop = '1px solid var(--color-border)';
+                        userInfoSpan.style.paddingTop = 'var(--space-8)';
+                        sidebarHeader.appendChild(userInfoSpan);
+                    }
+                    if (userInfoSpan) {
+                        userInfoSpan.innerHTML = `Connecté en tant que: <br><strong>${user.email || 'Utilisateur'}</strong> (${user.role || 'Rôle inconnu'})`;
+                    }
+
+                } else {
+                    // Token is invalid or expired
+                    console.log('Token invalid or expired on load.');
+                    localStorage.removeItem('gestcyber_token');
+                    updateUIForLoggedInState(); // Set UI to logged-out state
+                    if (loginModal && !loginModal.classList.contains('show')) { // Show login if not already shown due to other logic
+                         // loginModal.classList.add('show'); // Decide if modal should auto-show
+                         console.log("User is not logged in. Login button should be visible.");
+                    }
+                }
+            } catch (error) {
+                // Network error or backend not reachable
+                console.error('Error verifying token on load:', error);
+                localStorage.removeItem('gestcyber_token'); // Assume token is bad if network error
+                updateUIForLoggedInState();
+                // Don't necessarily show login modal on network error,
+                // as the app might be offline. User can click login if they want.
+                // Display a generic error if appropriate, or rely on component-level errors.
+                displayErrorOnDashboard('Impossible de vérifier la session. Le serveur est peut-être indisponible.');
+            }
+        } else {
+            // No token found
+            console.log('No token found on load. User is logged out.');
+            updateUIForLoggedInState(); // Ensure UI is in logged-out state
+            // Optionally, show login modal by default if no token
+            // if (loginModal && !loginModal.classList.contains('show')) {
+            //    loginModal.classList.add('show');
+            // }
+        }
+    }
+
+    // Call this new function at the end of DOMContentLoaded
+    checkAuthStateOnLoad();
 });
 
 // Navigation

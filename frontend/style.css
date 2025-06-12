@@ -1527,3 +1527,35 @@ canvas {
     background: var(--color-surface);
     border-radius: var(--radius-base);
 }
+
+/* Login Modal specific styles (if any needed beyond generic .modal styles) */
+/* The generic .modal styles from the existing style.css should cover most of it. */
+
+/* Style for error messages within forms, if not already present */
+.form-error-message {
+    color: var(--color-error);
+    background-color: rgba(var(--color-error-rgb), 0.1); /* Using RGB for opacity */
+    border: 1px solid rgba(var(--color-error-rgb), 0.3);
+    padding: var(--space-12);
+    border-radius: var(--radius-base);
+    margin-bottom: var(--space-16);
+    text-align: center;
+    font-size: var(--font-size-sm);
+}
+
+/* Ensure it's hidden by default if the 'display: none;' inline style is used,
+   but good to have a class for JS to toggle if needed. */
+.form-error-message.hidden {
+    display: none;
+}
+.form-error-message:not(.hidden) { /* Or just rely on JS to remove display:none */
+    display: block; /* Or flex, grid, etc., depending on content */
+}
+
+/* Ensure login/logout buttons in sidebar are distinct if needed */
+#login-btn {
+    /* Specific styles if needed */
+}
+#logout-btn {
+    /* Specific styles if needed, e.g., different color if not primary/secondary */
+}
