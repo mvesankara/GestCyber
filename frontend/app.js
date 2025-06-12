@@ -1,5 +1,135 @@
 // Application de gestion de crise cyber - JavaScript
 
+const API_BASE_URL = '/api'; // Assuming frontend is served from the same origin as backend after nginx proxy
+
+async function fetchIncidents() {
+    console.log('Attempting to fetch incidents...');
+    const token = localStorage.getItem('gestcyber_token'); // Placeholder for where token might be stored after login
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/incidents`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                // Conditionally add Authorization header if token exists
+                ...(token && { 'x-auth-token': token })
+            }
+        });
+
+        if (response.status === 401) {
+            console.error('Unauthorized: No token or token invalid. Please log in.');
+            // Optionally, redirect to a login page or show a message
+            // For now, we'll just log and display a message on the dashboard.
+            const dashboardPage = document.getElementById('dashboard');
+            if (dashboardPage.classList.contains('active')) {
+                displayErrorOnDashboard('Failed to fetch incidents: Authorization required. Please log in.');
+            }
+            return []; // Return empty array or handle as appropriate
+        }
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({ msg: 'Unknown error occurred' }));
+            console.error('Échec de la récupération des incidents:', response.status, errorData.msg);
+            const dashboardPage = document.getElementById('dashboard');
+            if (dashboardPage.classList.contains('active')) {
+                displayErrorOnDashboard(`Échec de la récupération des incidents: ${errorData.msg || response.statusText}`);
+            }
+            return [];
+        }
+        const incidents = await response.json();
+        console.log('Incidents fetched:', incidents);
+        return incidents;
+    } catch (error) {
+        console.error('Error fetching incidents:', error);
+        const dashboardPage = document.getElementById('dashboard');
+        if (dashboardPage.classList.contains('active')) {
+            displayErrorOnDashboard('Error fetching incidents: Could not connect to server.');
+        }
+        return [];
+    }
+}
+
+function displayErrorOnDashboard(message) {
+    // This function needs to be adapted to where you want to show the error.
+    // For example, modifying a specific part of the dashboard.
+    // For now, let's try to put it in the 'status-overview' card if it exists.
+    const statusOverviewCardBody = document.querySelector('#dashboard .status-overview .card__body');
+    if (statusOverviewCardBody) {
+        statusOverviewCardBody.innerHTML = `<p style="color: red; text-align: center;">${message}</p>`;
+    } else {
+        // Fallback if the specific element isn't found
+        const dashboardGrid = document.querySelector('#dashboard .dashboard-grid');
+        if (dashboardGrid) {
+            const errorDiv = document.createElement('div');
+            errorDiv.innerHTML = `<p style="color: red; text-align: center;">${message}</p>`;
+            errorDiv.style.gridColumn = "1 / -1"; // Span all columns
+            dashboardGrid.prepend(errorDiv);
+        }
+    }
+}
+
+function renderIncidents(incidents) {
+    const timelineRecentCardBody = document.querySelector('#dashboard .timeline-recent .card__body');
+    const timelineContainer = document.querySelector('#dashboard .timeline-recent .timeline');
+
+    if (!timelineRecentCardBody) {
+        console.warn('Timeline recent card body not found for rendering incidents.');
+        return;
+    }
+
+    // Clear existing mock timeline items
+    if(timelineContainer) {
+      timelineContainer.innerHTML = ''; // Clear existing items
+    } else {
+      // if .timeline is not there, clear card body and append to it
+      timelineRecentCardBody.innerHTML = '';
+    }
+
+    if (incidents.length === 0) {
+        const p = document.createElement('p');
+        p.textContent = 'Aucun incident trouvé ou échec du chargement.';
+        if(timelineContainer) timelineContainer.appendChild(p);
+        else timelineRecentCardBody.appendChild(p);
+        return;
+    }
+
+    const newTimelineContainer = timelineContainer || document.createElement('div');
+    newTimelineContainer.className = 'timeline'; // Ensure class if creating new
+
+    incidents.forEach(incident => {
+        const item = document.createElement('div');
+        item.className = 'timeline-item'; // Add class for styling
+        // Add a class based on niveau_critique if needed, e.g. incident.niveau_critique
+        if (incident.niveau_critique === 'crise' || incident.niveau_critique === 'critique') {
+            item.classList.add('critical');
+        } else if (incident.niveau_critique === 'alerte') {
+            item.classList.add('warning');
+        }
+
+        // Format date nicely (basic example)
+        const date = new Date(incident.created_at).toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' });
+
+        item.innerHTML = `
+            <div class="timeline-time">${date}</div>
+            <div class="timeline-content">
+                <strong>${incident.titre || 'Titre non disponible'}</strong>
+                <p>Description: ${incident.description || 'N/A'}</p>
+                <p>Statut: ${incident.statut || 'N/A'} | Phase: ${incident.phase_actuelle || 'N/A'} | Criticité: ${incident.niveau_critique || 'N/A'}</p>
+            </div>
+        `;
+        newTimelineContainer.appendChild(item);
+    });
+
+    if(!timelineContainer) { // if we created newTimelineContainer, append it
+      timelineRecentCardBody.appendChild(newTimelineContainer);
+    }
+}
+
+async function loadDashboardData() {
+    const incidents = await fetchIncidents();
+    renderIncidents(incidents);
+    // You might want to update other dashboard parts here too eventually
+}
+
 // DonnÃ©es de dÃ©monstration
 const crisisData = {
     startTime: new Date('2025-06-11T08:30:00'),
@@ -177,6 +307,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Mise Ã  jour du timer toutes les minutes
     setInterval(updateCrisisTimer, 60000);
+
+    if (document.getElementById('dashboard').classList.contains('active')) {
+        loadDashboardData();
+    }
 });
 
 // Navigation
@@ -202,6 +336,8 @@ function initializeNavigation() {
             // RÃ©initialiser les graphiques si nÃ©cessaire
             if (targetPage === 'reporting') {
                 setTimeout(initializeCharts, 100);
+            } else if (targetPage === 'dashboard') {
+                loadDashboardData(); // Load data when dashboard becomes active
             }
         });
     });
@@ -258,12 +394,71 @@ function initializeModals() {
     document.getElementById('action-form').addEventListener('submit', handleActionSubmit);
 }
 
-function handleIncidentSubmit(e) {
+async function handleIncidentSubmit(e) {
     e.preventDefault();
-    // Simulation de crÃ©ation d'incident
-    alert('Incident dÃ©clarÃ© avec succÃ¨s ! La cellule de crise sera notifiÃ©e.');
-    document.getElementById('incident-modal').classList.remove('show');
-    e.target.reset();
+    const form = e.target;
+
+    const titre = document.getElementById('incident-titre').value;
+    const type_incident_value = document.getElementById('incident-type').value;
+    const niveau_critique_value = document.getElementById('incident-urgence').value;
+    const description = document.getElementById('incident-description').value;
+
+    // Basic frontend validation
+    if (!titre || !type_incident_value || !niveau_critique_value || !description) {
+        showNotification('Veuillez remplir tous les champs obligatoires.', 'error'); // Corrected: Veuillez
+        return;
+    }
+
+    const incidentData = {
+        titre: titre,
+        type_incident: type_incident_value, // Assuming values match DB enum
+        niveau_critique: niveau_critique_value, // Assuming values match DB enum
+        description: description,
+        phase_actuelle: 'phase1_alerter', // Hardcoded default for now
+        statut: 'ouvert' // Hardcoded default for now
+        // perimetre_impact and dirigeant_crise_id are not in this simple form
+    };
+
+    console.log('Submitting incident data:', incidentData);
+    const token = localStorage.getItem('gestcyber_token');
+
+    try {
+        const response = await fetch(`${API_BASE_URL}/incidents`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token && { 'x-auth-token': token })
+            },
+            body: JSON.stringify(incidentData)
+        });
+
+        if (response.status === 401) {
+            showNotification('Non autorisé. Veuillez vous connecter.', 'error'); // Corrected: Non autorisé. Veuillez vous connecter.
+            // Optionally, redirect to login or display login modal
+            return;
+        }
+
+        const responseData = await response.json();
+
+        if (!response.ok) { // Covers 400, 500, etc.
+            console.error('Failed to create incident:', responseData);
+            showNotification(`Erreur: ${responseData.msg || response.statusText || 'Impossible de créer l\'incident'}`, 'error'); // Corrected: Erreur, Impossible de créer l'incident
+            return;
+        }
+
+        showNotification('Incident déclaré avec succès !', 'success'); // Corrected: Incident déclaré avec succès !
+        document.getElementById('incident-modal').classList.remove('show');
+        form.reset();
+
+        // Refresh dashboard data to show new incident
+        if (document.getElementById('dashboard').classList.contains('active')) {
+            loadDashboardData();
+        }
+
+    } catch (error) {
+        console.error('Error creating incident:', error);
+        showNotification('Erreur de connexion lors de la création de l\'incident.', 'error'); // Corrected: Erreur de connexion lors de la création de l'incident.
+    }
 }
 
 function handleActionSubmit(e) {

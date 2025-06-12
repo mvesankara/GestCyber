@@ -23,7 +23,8 @@
                     <span class="nav-icon">ð</span> Dashboard
                 </a></li>
                 <li><a href="#actions" class="nav-link" data-page="actions">
-                    <span class="nav-icon">â</span> Actions
+                    <span class="nav-icon">â
+</span> Actions
                 </a></li>
                 <li><a href="#communication" class="nav-link" data-page="communication">
                     <span class="nav-icon">ð¬</span> Communication
@@ -534,8 +535,12 @@
             <div class="modal-body">
                 <form id="incident-form">
                     <div class="form-group">
+                        <label class="form-label" for="incident-titre">Titre</label>
+                        <input type="text" id="incident-titre" class="form-control" placeholder="Titre de l'incident..." required>
+                    </div>
+                    <div class="form-group">
                         <label class="form-label">Type d'incident</label>
-                        <select class="form-control" required>
+                        <select id="incident-type" class="form-control" required>
                             <option value="">SÃ©lectionner...</option>
                             <option value="ransomware">Ransomware</option>
                             <option value="data-breach">Fuite de donnÃ©es</option>
@@ -546,7 +551,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Niveau d'urgence</label>
-                        <select class="form-control" required>
+                        <select id="incident-urgence" class="form-control" required>
                             <option value="normal">Normal</option>
                             <option value="alerte">Alerte</option>
                             <option value="crise">Crise</option>
@@ -555,7 +560,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">Description</label>
-                        <textarea class="form-control" rows="4" placeholder="Description dÃ©taillÃ©e de l'incident..." required></textarea>
+                        <textarea id="incident-description" class="form-control" rows="4" placeholder="Description détaillée de l'incident..." required></textarea>
                     </div>
                     <div class="modal-actions">
                         <button type="button" class="btn btn--secondary" id="cancel-incident">Annuler</button>
