@@ -631,6 +631,187 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="app.js"></script>
 
+    <!-- Edit Incident Modal -->
+    <div id="edit-incident-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Modifier l'Incident</h3>
+                <button class="modal-close" id="close-edit-incident-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-incident-form">
+                    <input type="hidden" id="edit-incident-id"> <!-- To store the ID of the incident being edited -->
+                    <div id="edit-incident-error-message" class="form-error-message" style="display: none;"></div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="edit-incident-titre">Titre</label>
+                        <input type="text" id="edit-incident-titre" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="edit-incident-description">Description</label>
+                        <textarea id="edit-incident-description" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="edit-incident-type">Type d'incident</label>
+                        <select id="edit-incident-type" class="form-control" required>
+                            <option value="">Sélectionner...</option>
+                            <option value="ransomware">Ransomware</option>
+                            <option value="fuite_donnees">Fuite de données</option>
+                            <option value="ddos">Attaque DDoS</option>
+                            <option value="compromission">Compromission</option>
+                            <option value="autre">Autre</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="edit-incident-niveau-critique">Niveau de criticité</label>
+                        <select id="edit-incident-niveau-critique" class="form-control" required>
+                            <option value="">Sélectionner...</option>
+                            <option value="normal">Normal</option>
+                            <option value="alerte">Alerte</option>
+                            <option value="crise">Crise</option>
+                            <option value="critique">Critique</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="edit-incident-phase-actuelle">Phase actuelle</label>
+                        <select id="edit-incident-phase-actuelle" class="form-control" required>
+                            <option value="">Sélectionner...</option>
+                            <option value="phase1_alerter">Phase 1 - Alerter</option>
+                            <option value="phase2_comprendre">Phase 2 - Comprendre</option>
+                            <option value="phase3_relancer">Phase 3 - Relancer</option>
+                            <option value="phase4_capitaliser">Phase 4 - Capitaliser</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="edit-incident-statut">Statut</label>
+                        <select id="edit-incident-statut" class="form-control" required>
+                            <option value="">Sélectionner...</option>
+                            <option value="ouvert">Ouvert</option>
+                            <option value="en_cours">En cours</option>
+                            <option value="resolu">Résolu</option>
+                            <option value="ferme">Fermé</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="edit-incident-perimetre-impact">Périmètre d'impact</label>
+                        <textarea id="edit-incident-perimetre-impact" class="form-control" rows="2"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="edit-incident-dirigeant-crise-id">ID Dirigeant de crise (optionnel)</label>
+                        <input type="number" id="edit-incident-dirigeant-crise-id" class="form-control" placeholder="ID numérique de l'utilisateur">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="edit-incident-date-fin">Date de fin (optionnel)</label>
+                        <input type="datetime-local" id="edit-incident-date-fin" class="form-control">
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn--secondary" id="cancel-edit-incident-modal">Annuler</button>
+                        <button type="submit" class="btn btn--primary">Sauvegarder les modifications</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Action Modal -->
+    <div id="edit-action-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Modifier l'Action</h3>
+                <button class="modal-close" id="close-edit-action-modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="edit-action-form">
+                    <input type="hidden" id="edit-action-id">
+                    <div id="edit-action-error-message" class="form-error-message" style="display: none;"></div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="edit-action-titre">Titre</label>
+                        <input type="text" id="edit-action-titre" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="edit-action-description">Description</label>
+                        <textarea id="edit-action-description" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="edit-action-incident-id">ID Incident (Référence)</label>
+                        <input type="number" id="edit-action-incident-id" class="form-control" disabled> <!-- Typically not editable here -->
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="edit-action-phase">Phase ANSSI</label>
+                        <select id="edit-action-phase" class="form-control" required>
+                            <option value="phase1_alerter">Phase 1 - Alerter</option>
+                            <option value="phase2_comprendre">Phase 2 - Comprendre</option>
+                            <option value="phase3_relancer">Phase 3 - Relancer</option>
+                            <option value="phase4_capitaliser">Phase 4 - Capitaliser</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="edit-action-priorite">Priorité</label>
+                        <select id="edit-action-priorite" class="form-control" required>
+                            <option value="P0">P0 - Critique</option>
+                            <option value="P1">P1 - Haute</option>
+                            <option value="P2">P2 - Moyenne</option>
+                            <option value="P3">P3 - Basse</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="edit-action-type-action">Type d'action</label>
+                        <input type="text" id="edit-action-type-action" class="form-control" placeholder="investigation, endurcissement...">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="edit-action-assignee-id">ID Assigné (optionnel)</label>
+                        <input type="number" id="edit-action-assignee-id" class="form-control" placeholder="ID numérique de l'utilisateur">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="edit-action-equipe-responsable">Équipe responsable</label>
+                        <input type="text" id="edit-action-equipe-responsable" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="edit-action-statut">Statut</label>
+                        <select id="edit-action-statut" class="form-control" required>
+                            <option value="todo">À faire</option>
+                            <option value="en_cours">En cours</option>
+                            <option value="bloque">Bloqué</option>
+                            <option value="termine">Terminé</option>
+                            <option value="annule">Annulé</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="edit-action-date-echeance">Date d'échéance</label>
+                        <input type="datetime-local" id="edit-action-date-echeance" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="edit-action-date-debut-execution">Date début exécution</label>
+                        <input type="datetime-local" id="edit-action-date-debut-execution" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="edit-action-date-fin-execution">Date fin exécution</label>
+                        <input type="datetime-local" id="edit-action-date-fin-execution" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="edit-action-temps-estime">Temps estimé (minutes)</label>
+                        <input type="number" id="edit-action-temps-estime" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="edit-action-temps-reel">Temps réel (minutes)</label>
+                        <input type="number" id="edit-action-temps-reel" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="edit-action-commentaires">Commentaires</label>
+                        <textarea id="edit-action-commentaires" class="form-control" rows="2"></textarea>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn--secondary" id="cancel-edit-action-modal">Annuler</button>
+                        <button type="submit" class="btn btn--primary">Sauvegarder</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Login Modal -->
     <div id="login-modal" class="modal">
         <div class="modal-content">

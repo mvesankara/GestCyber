@@ -114,6 +114,10 @@ function renderIncidents(incidents) {
                 <strong>${incident.titre || 'Titre non disponible'}</strong>
                 <p>Description: ${incident.description || 'N/A'}</p>
                 <p>Statut: ${incident.statut || 'N/A'} | Phase: ${incident.phase_actuelle || 'N/A'} | Criticité: ${incident.niveau_critique || 'N/A'}</p>
+                <div class="incident-item-actions" style="margin-top: 10px; display: flex; gap: 10px;">
+                    <button class="btn btn--sm btn--secondary edit-incident-btn" data-id="${incident.id}">Modifier</button>
+                    <button class="btn btn--sm btn--outline delete-incident-btn" data-id="${incident.id}" style="border-color: var(--color-error); color: var(--color-error);">Supprimer</button>
+                </div>
             </div>
         `;
         newTimelineContainer.appendChild(item);
@@ -295,6 +299,189 @@ let mainCourante = [
 let currentPage = 'dashboard';
 let filteredActions = [...actions];
 
+const editIncidentModal = document.getElementById('edit-incident-modal');
+const editIncidentForm = document.getElementById('edit-incident-form');
+const editIncidentErrorMessage = document.getElementById('edit-incident-error-message');
+// Selectors for modal fields
+const editIncidentIdField = document.getElementById('edit-incident-id');
+const editIncidentTitreField = document.getElementById('edit-incident-titre');
+const editIncidentDescriptionField = document.getElementById('edit-incident-description');
+const editIncidentTypeField = document.getElementById('edit-incident-type');
+const editIncidentNiveauCritiqueField = document.getElementById('edit-incident-niveau-critique');
+const editIncidentPhaseActuelleField = document.getElementById('edit-incident-phase-actuelle');
+const editIncidentStatutField = document.getElementById('edit-incident-statut');
+const editIncidentPerimetreImpactField = document.getElementById('edit-incident-perimetre-impact');
+const editIncidentDirigeantCriseIdField = document.getElementById('edit-incident-dirigeant-crise-id');
+const editIncidentDateFinField = document.getElementById('edit-incident-date-fin');
+
+const editActionModal = document.getElementById('edit-action-modal');
+const editActionForm = document.getElementById('edit-action-form');
+const editActionErrorMessage = document.getElementById('edit-action-error-message');
+// Define field selectors for edit action modal
+const editActionIdField = document.getElementById('edit-action-id');
+const editActionTitreField = document.getElementById('edit-action-titre');
+const editActionDescriptionField = document.getElementById('edit-action-description');
+const editActionIncidentIdField = document.getElementById('edit-action-incident-id');
+const editActionPhaseField = document.getElementById('edit-action-phase');
+const editActionPrioriteField = document.getElementById('edit-action-priorite');
+const editActionTypeActionField = document.getElementById('edit-action-type-action');
+const editActionAssigneeIdField = document.getElementById('edit-action-assignee-id');
+const editActionEquipeResponsableField = document.getElementById('edit-action-equipe-responsable');
+const editActionStatutField = document.getElementById('edit-action-statut');
+const editActionDateEcheanceField = document.getElementById('edit-action-date-echeance');
+const editActionDateDebutExecutionField = document.getElementById('edit-action-date-debut-execution');
+const editActionDateFinExecutionField = document.getElementById('edit-action-date-fin-execution');
+const editActionTempsEstimeField = document.getElementById('edit-action-temps-estime');
+const editActionTempsReelField = document.getElementById('edit-action-temps-reel');
+const editActionCommentairesField = document.getElementById('edit-action-commentaires');
+
+
+async function openEditIncidentModal(incidentId) {
+    if (editIncidentErrorMessage) editIncidentErrorMessage.style.display = 'none';
+    try {
+        const token = localStorage.getItem('gestcyber_token');
+        const response = await fetch(`${API_BASE_URL}/incidents/${incidentId}`, {
+            headers: { ...(token && { 'x-auth-token': token }) }
+        });
+        if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            showNotification(`Erreur: Impossible de charger les détails de l'incident. ${errData.msg || response.statusText}`, 'error');
+            return;
+        }
+        const incident = await response.json();
+
+        editIncidentIdField.value = incident.id;
+        editIncidentTitreField.value = incident.titre || '';
+        editIncidentDescriptionField.value = incident.description || '';
+        editIncidentTypeField.value = incident.type_incident || '';
+        editIncidentNiveauCritiqueField.value = incident.niveau_critique || '';
+        editIncidentPhaseActuelleField.value = incident.phase_actuelle || '';
+        editIncidentStatutField.value = incident.statut || '';
+        editIncidentPerimetreImpactField.value = incident.perimetre_impact || '';
+        editIncidentDirigeantCriseIdField.value = incident.dirigeant_crise_id || '';
+        // Format date_fin for datetime-local input: YYYY-MM-DDTHH:mm
+        if (incident.date_fin) {
+          const d = new Date(incident.date_fin);
+          // Check if date is valid before formatting
+          if (!isNaN(d.getTime())) {
+              const year = d.getFullYear();
+              const month = (d.getMonth() + 1).toString().padStart(2, '0');
+              const day = d.getDate().toString().padStart(2, '0');
+              const hours = d.getHours().toString().padStart(2, '0');
+              const minutes = d.getMinutes().toString().padStart(2, '0');
+              editIncidentDateFinField.value = `${year}-${month}-${day}T${hours}:${minutes}`;
+          } else {
+              editIncidentDateFinField.value = ''; // Clear if date is invalid
+          }
+        } else {
+            editIncidentDateFinField.value = '';
+        }
+
+        if (editIncidentModal) editIncidentModal.classList.add('show');
+    } catch (error) {
+        console.error('Error fetching incident for edit:', error);
+        showNotification("Erreur de connexion lors du chargement de l'incident.", 'error');
+    }
+}
+
+async function handleDeleteIncident(incidentId) {
+    // Corrected: Êtes-vous sûr de vouloir supprimer cet incident et toutes ses actions associées ?
+    if (window.confirm("Êtes-vous sûr de vouloir supprimer cet incident et toutes ses actions associées ?")) {
+        try {
+            const token = localStorage.getItem('gestcyber_token');
+            const response = await fetch(`${API_BASE_URL}/incidents/${incidentId}`, {
+                method: 'DELETE',
+                headers: { ...(token && { 'x-auth-token': token }) }
+            });
+
+            if (!response.ok) {
+                const errData = await response.json().catch(() => ({}));
+                showNotification(`Erreur: Impossible de supprimer l'incident. ${errData.msg || response.statusText}`, 'error');
+                return;
+            }
+            showNotification('Incident supprimé avec succès !', 'success');
+            loadDashboardData(); // Refresh dashboard
+        } catch (error) {
+            console.error('Error deleting incident:', error);
+            showNotification("Erreur de connexion lors de la suppression de l'incident.", 'error');
+        }
+    }
+}
+
+async function openEditActionModal(actionId) {
+    if (editActionErrorMessage) editActionErrorMessage.style.display = 'none';
+    try {
+        const token = localStorage.getItem('gestcyber_token');
+        const response = await fetch(`${API_BASE_URL}/actions/${actionId}`, {
+            headers: { ...(token && { 'x-auth-token': token }) }
+        });
+        if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            showNotification(`Erreur: Impossible de charger les détails de l'action. ${errData.msg || response.statusText}`, 'error');
+            return;
+        }
+        const action = await response.json();
+
+        editActionIdField.value = action.id;
+        editActionTitreField.value = action.titre || '';
+        editActionDescriptionField.value = action.description || '';
+        editActionIncidentIdField.value = action.incident_id || ''; // Display only, not editable
+        editActionPhaseField.value = action.phase || '';
+        editActionPrioriteField.value = action.priorite || '';
+        editActionTypeActionField.value = action.type_action || '';
+        editActionAssigneeIdField.value = action.assignee_id || '';
+        editActionEquipeResponsableField.value = action.equipe_responsable || '';
+        editActionStatutField.value = action.statut || '';
+
+        const formatDateForInput = (dateString) => {
+            if (!dateString) return '';
+            const d = new Date(dateString);
+            if (isNaN(d.getTime())) return '';
+            return `${d.getFullYear()}-${(d.getMonth() + 1).toString().padStart(2, '0')}-${d.getDate().toString().padStart(2, '0')}T${d.getHours().toString().padStart(2, '0')}:${d.getMinutes().toString().padStart(2, '0')}`;
+        };
+
+        editActionDateEcheanceField.value = formatDateForInput(action.date_echeance);
+        editActionDateDebutExecutionField.value = formatDateForInput(action.date_debut_execution);
+        editActionDateFinExecutionField.value = formatDateForInput(action.date_fin_execution);
+
+        editActionTempsEstimeField.value = action.temps_estime || '';
+        editActionTempsReelField.value = action.temps_reel || '';
+        editActionCommentairesField.value = action.commentaires || '';
+
+        if (editActionModal) editActionModal.classList.add('show');
+    } catch (error) {
+        console.error('Error fetching action for edit:', error);
+        showNotification("Erreur de connexion lors du chargement de l'action.", 'error');
+    }
+}
+
+async function handleDeleteAction(actionId) {
+    if (window.confirm("Êtes-vous sûr de vouloir supprimer cette action ?")) {
+        try {
+            const token = localStorage.getItem('gestcyber_token');
+            const response = await fetch(`${API_BASE_URL}/actions/${actionId}`, {
+                method: 'DELETE',
+                headers: { ...(token && { 'x-auth-token': token }) }
+            });
+            if (!response.ok) {
+                const errData = await response.json().catch(() => ({}));
+                showNotification(`Erreur: Impossible de supprimer l'action. ${errData.msg || response.statusText}`, 'error');
+                return;
+            }
+            showNotification('Action supprimée avec succès !', 'success');
+            if (typeof applyActionFilters === 'function') {
+               applyActionFilters();
+            } else {
+               generateActionsList();
+            }
+        } catch (error) {
+            console.error('Error deleting action:', error);
+            showNotification("Erreur de connexion lors de la suppression de l'action.", 'error');
+        }
+    }
+}
+
+
 function updateUIForLoggedInState() {
     const token = localStorage.getItem('gestcyber_token');
     const loginBtn = document.getElementById('login-btn');
@@ -398,6 +585,101 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     // End of Login Modal Toggling Logic
+
+    // Delegated event listeners for edit/delete incident buttons
+    const dashboardTimelineContainer = document.querySelector('#dashboard .timeline-recent .card__body');
+    if (dashboardTimelineContainer) {
+        dashboardTimelineContainer.addEventListener('click', async (e) => {
+            if (e.target.classList.contains('edit-incident-btn')) {
+                const incidentId = e.target.dataset.id;
+                await openEditIncidentModal(incidentId);
+            } else if (e.target.classList.contains('delete-incident-btn')) {
+                const incidentId = e.target.dataset.id;
+                handleDeleteIncident(incidentId);
+            }
+        });
+    }
+
+    // Edit Incident Form Submission
+    if (editIncidentForm) {
+        editIncidentForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (editIncidentErrorMessage) editIncidentErrorMessage.style.display = 'none';
+
+            const incidentId = editIncidentIdField.value;
+            const updatedData = {
+                titre: editIncidentTitreField.value,
+                description: editIncidentDescriptionField.value,
+                type_incident: editIncidentTypeField.value,
+                niveau_critique: editIncidentNiveauCritiqueField.value,
+                phase_actuelle: editIncidentPhaseActuelleField.value,
+                statut: editIncidentStatutField.value,
+                perimetre_impact: editIncidentPerimetreImpactField.value,
+                dirigeant_crise_id: editIncidentDirigeantCriseIdField.value ? parseInt(editIncidentDirigeantCriseIdField.value) : null,
+                date_fin: editIncidentDateFinField.value ? new Date(editIncidentDateFinField.value).toISOString() : null
+            };
+
+            // Remove null dirigeant_crise_id if field is empty, to avoid sending "NaN" if parsing empty string
+            if (!editIncidentDirigeantCriseIdField.value) delete updatedData.dirigeant_crise_id;
+
+
+            try {
+                const token = localStorage.getItem('gestcyber_token');
+                const response = await fetch(`${API_BASE_URL}/incidents/${incidentId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(token && { 'x-auth-token': token })
+                    },
+                    body: JSON.stringify(updatedData)
+                });
+
+                const responseData = await response.json();
+                if (!response.ok) {
+                    if (editIncidentErrorMessage) {
+                        editIncidentErrorMessage.textContent = responseData.msg || `Erreur lors de la mise à jour: ${response.statusText}`;
+                        editIncidentErrorMessage.style.display = 'block';
+                    }
+                    return;
+                }
+                showNotification('Incident mis à jour avec succès !', 'success');
+                if (editIncidentModal) editIncidentModal.classList.remove('show');
+                loadDashboardData(); // Refresh dashboard
+            } catch (error) {
+                console.error('Error updating incident:', error);
+                if (editIncidentErrorMessage) {
+                    editIncidentErrorMessage.textContent = "Erreur de connexion lors de la mise à jour.";
+                    editIncidentErrorMessage.style.display = 'block';
+                }
+            }
+        });
+    }
+
+    // Edit Incident Modal Close Handlers
+    const closeEditIncidentModalBtn = document.getElementById('close-edit-incident-modal');
+    const cancelEditIncidentModalBtn = document.getElementById('cancel-edit-incident-modal');
+
+    if (closeEditIncidentModalBtn) {
+        closeEditIncidentModalBtn.addEventListener('click', () => {
+            if (editIncidentModal) editIncidentModal.classList.remove('show');
+            if (editIncidentErrorMessage) editIncidentErrorMessage.style.display = 'none';
+        });
+    }
+    if (cancelEditIncidentModalBtn) {
+        cancelEditIncidentModalBtn.addEventListener('click', () => {
+            if (editIncidentModal) editIncidentModal.classList.remove('show');
+            if (editIncidentErrorMessage) editIncidentErrorMessage.style.display = 'none';
+        });
+    }
+    if (editIncidentModal) {
+        editIncidentModal.addEventListener('click', (e) => {
+            if (e.target === editIncidentModal) {
+                editIncidentModal.classList.remove('show');
+                if (editIncidentErrorMessage) editIncidentErrorMessage.style.display = 'none';
+            }
+        });
+    }
+
 
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
@@ -566,6 +848,107 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Call this new function at the end of DOMContentLoaded
     checkAuthStateOnLoad();
+
+    // Delegated event listeners for edit/delete action buttons
+    const actionsListContainer = document.getElementById('actions-list');
+    if (actionsListContainer) {
+        actionsListContainer.addEventListener('click', async (e) => {
+            if (e.target.classList.contains('edit-action-btn')) {
+                const actionId = e.target.dataset.id;
+                await openEditActionModal(actionId);
+            } else if (e.target.classList.contains('delete-action-btn')) {
+                const actionId = e.target.dataset.id;
+                handleDeleteAction(actionId);
+            }
+        });
+    }
+
+    // Edit Action Form Submission
+    if (editActionForm) {
+        editActionForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (editActionErrorMessage) editActionErrorMessage.style.display = 'none';
+
+            const actionId = editActionIdField.value;
+            const updatedData = {
+                titre: editActionTitreField.value,
+                description: editActionDescriptionField.value,
+                phase: editActionPhaseField.value,
+                priorite: editActionPrioriteField.value,
+                type_action: editActionTypeActionField.value,
+                assignee_id: editActionAssigneeIdField.value ? parseInt(editActionAssigneeIdField.value) : null,
+                equipe_responsable: editActionEquipeResponsableField.value,
+                statut: editActionStatutField.value,
+                date_echeance: editActionDateEcheanceField.value ? new Date(editActionDateEcheanceField.value).toISOString() : null,
+                date_debut_execution: editActionDateDebutExecutionField.value ? new Date(editActionDateDebutExecutionField.value).toISOString() : null,
+                date_fin_execution: editActionDateFinExecutionField.value ? new Date(editActionDateFinExecutionField.value).toISOString() : null,
+                temps_estime: editActionTempsEstimeField.value ? parseInt(editActionTempsEstimeField.value) : null,
+                temps_reel: editActionTempsReelField.value ? parseInt(editActionTempsReelField.value) : null,
+                commentaires: editActionCommentairesField.value
+            };
+            if (!editActionAssigneeIdField.value) delete updatedData.assignee_id;
+            if (!editActionTempsEstimeField.value) delete updatedData.temps_estime;
+            if (!editActionTempsReelField.value) delete updatedData.temps_reel;
+
+            try {
+                const token = localStorage.getItem('gestcyber_token');
+                const response = await fetch(`${API_BASE_URL}/actions/${actionId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(token && { 'x-auth-token': token })
+                    },
+                    body: JSON.stringify(updatedData)
+                });
+                const responseData = await response.json();
+                if (!response.ok) {
+                    if (editActionErrorMessage) {
+                        editActionErrorMessage.textContent = responseData.msg || `Erreur lors de la mise à jour de l'action: ${response.statusText}`;
+                        editActionErrorMessage.style.display = 'block';
+                    }
+                    return;
+                }
+                showNotification('Action mise à jour avec succès !', 'success');
+                if (editActionModal) editActionModal.classList.remove('show');
+                if (typeof applyActionFilters === 'function') {
+                   applyActionFilters();
+                } else {
+                   generateActionsList();
+                }
+            } catch (error) {
+                console.error('Error updating action:', error);
+                if (editActionErrorMessage) {
+                    editActionErrorMessage.textContent = "Erreur de connexion lors de la mise à jour de l'action.";
+                    editActionErrorMessage.style.display = 'block';
+                }
+            }
+        });
+    }
+
+    // Edit Action Modal Close Handlers
+    const closeEditActionModalBtn = document.getElementById('close-edit-action-modal');
+    const cancelEditActionModalBtn = document.getElementById('cancel-edit-action-modal');
+
+    if (closeEditActionModalBtn) {
+        closeEditActionModalBtn.addEventListener('click', () => {
+            if (editActionModal) editActionModal.classList.remove('show');
+            if (editActionErrorMessage) editActionErrorMessage.style.display = 'none';
+        });
+    }
+    if (cancelEditActionModalBtn) {
+        cancelEditActionModalBtn.addEventListener('click', () => {
+            if (editActionModal) editActionModal.classList.remove('show');
+            if (editActionErrorMessage) editActionErrorMessage.style.display = 'none';
+        });
+    }
+    if (editActionModal) {
+        editActionModal.addEventListener('click', (e) => {
+            if (e.target === editActionModal) {
+                editActionModal.classList.remove('show');
+                if (editActionErrorMessage) editActionErrorMessage.style.display = 'none';
+            }
+        });
+    }
 });
 
 // Navigation
@@ -776,58 +1159,36 @@ function generateActionsList() {
 function createActionElement(action) {
     const div = document.createElement('div');
     div.className = 'action-item';
-    
-    const role = roles.find(r => r.id === action.role);
-    const phase = phases.find(p => p.id === action.phase);
-    
-    const statusLabels = {
-        'todo': 'Ã faire',
-        'in-progress': 'En cours', 
-        'blocked': 'BloquÃ©',
-        'done': 'TerminÃ©'
-    };
-    
-    const statusClasses = {
-        'todo': 'status--info',
-        'in-progress': 'status--warning',
-        'blocked': 'status--error', 
-        'done': 'status--success'
-    };
-    
+    // Ensure role and phase data are available or handled gracefully if not
+    const role = roles.find(r => r.id === action.role) || { nom: action.role || 'N/A' };
+    // const phaseObj = phases.find(p => p.id === action.phase) || { nom: `Phase ${action.phase}` }; // phases might not be globally available here.
+
+    const statusLabels = { /* ... already defined or define it ... */ };
+    const statusClasses = { /* ... already defined or define it ... */ };
+    statusLabels['todo'] = 'À faire'; statusLabels['en_cours'] = 'En cours'; statusLabels['bloque'] = 'Bloqué'; statusLabels['termine'] = 'Terminé'; statusLabels['annule'] = 'Annulé';
+    statusClasses['todo'] = 'status--info'; statusClasses['en_cours'] = 'status--warning'; statusClasses['bloque'] = 'status--error'; statusClasses['termine'] = 'status--success'; statusClasses['annule'] = 'status--info';
+
+
     div.innerHTML = `
         <div class="action-header">
-            <h3 class="action-title">${action.title}</h3>
-            <span class="status ${statusClasses[action.status]}">${statusLabels[action.status]}</span>
+            <h3 class="action-title">${action.titre}</h3>
+            <span class="status ${statusClasses[action.statut] || 'status--info'}">${statusLabels[action.statut] || action.statut}</span>
         </div>
         <div class="action-meta">
-            <span class="action-tag priority-${action.priority}">${action.priority}</span>
-            <span class="action-tag role-${action.role}">${role.nom}</span>
+            <span class="action-tag priority-${action.priorite}">${action.priorite}</span>
+            <span class="action-tag role-${action.role || 'default'}">${role.nom}</span>
             <span class="action-tag">Phase ${action.phase}</span>
         </div>
-        <p class="action-description">${action.description}</p>
+        <p class="action-description">${action.description || ''}</p>
         <div class="action-footer">
-            <span class="action-progress">CrÃ©Ã© le ${formatDate(action.createdAt)}</span>
+            <span class="action-progress">Créé le ${action.created_at ? formatDate(action.created_at) : 'N/A'}</span>
             <div class="action-buttons">
-                ${action.status !== 'done' ? `<button class="btn btn--sm btn--secondary" onclick="updateActionStatus(${action.id}, 'in-progress')">Prendre en charge</button>` : ''}
-                ${action.status === 'in-progress' ? `<button class="btn btn--sm btn--primary" onclick="updateActionStatus(${action.id}, 'done')">Terminer</button>` : ''}
+                <button class="btn btn--sm btn--secondary edit-action-btn" data-id="${action.id}" style="margin-left: 5px;">Modifier</button>
+                <button class="btn btn--sm btn--outline delete-action-btn" data-id="${action.id}" style="border-color: var(--color-error); color: var(--color-error); margin-left: 5px;">Supprimer</button>
             </div>
         </div>
     `;
-    
     return div;
-}
-
-function updateActionStatus(actionId, newStatus) {
-    const action = actions.find(a => a.id === actionId);
-    if (action) {
-        action.status = newStatus;
-        if (newStatus === 'done') {
-            action.completedAt = new Date().toISOString();
-        }
-        filteredActions = [...actions];
-        generateActionsList();
-        showNotification(`Action mise Ã  jour : ${statusLabels[newStatus] || newStatus}`, 'success');
-    }
 }
 
 // Filtres des actions
