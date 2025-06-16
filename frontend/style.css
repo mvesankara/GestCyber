@@ -1559,3 +1559,47 @@ canvas {
 #logout-btn {
     /* Specific styles if needed, e.g., different color if not primary/secondary */
 }
+
+/* Fil des Événements styles */
+.fil-entree-item {
+    padding: var(--space-12);
+    border-bottom: 1px solid var(--color-border);
+    transition: background-color var(--duration-fast);
+}
+.fil-entree-item:last-child {
+    border-bottom: none;
+}
+.fil-entree-item:hover {
+    background-color: var(--color-secondary); /* Subtle hover */
+}
+.fil-entree-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-8);
+    font-size: var(--font-size-sm);
+}
+.fil-entree-auteur {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text);
+}
+.fil-entree-timestamp {
+    color: var(--color-text-secondary);
+}
+.fil-entree-contenu {
+    margin: 0;
+    color: var(--color-text-secondary);
+    white-space: pre-wrap; /* To respect newlines in content */
+    word-wrap: break-word; /* To break long words */
+}
+.fil-entree-details { /* For optional details like type, criticite */
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-4);
+}
+.fil-entree-details span {
+  margin-right: var(--space-8);
+  padding: var(--space-2) var(--space-4);
+  background-color: var(--color-secondary);
+  border-radius: var(--radius-sm);
+}

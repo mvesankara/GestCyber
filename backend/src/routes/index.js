@@ -10,6 +10,7 @@ router.use('/communications', require('./api/communications'));
 router.use('/systems', require('./api/systems'));
 router.use('/metrics', require('./api/metrics'));
 router.use('/retex', require('./api/retex'));
+router.use('/fil-evenements', require('./api/filEvenementsRoutes'));
 
 // Route de documentation API
 router.get('/', (req, res) => {
@@ -24,7 +25,8 @@ router.get('/', (req, res) => {
             '/api/communications - Communications de crise',
             '/api/systems - Gestion des systèmes',
             '/api/metrics - Métriques et KPIs',
-            '/api/retex - Retours d\'expérience'
+            '/api/retex - Retours d\'expérience',
+            '/api/fil-evenements - Fil des événements (Main Courante)'
         ],
         documentation: '/docs'
     });

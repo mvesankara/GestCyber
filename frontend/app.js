@@ -120,6 +120,20 @@ function renderIncidents(incidents) {
                 </div>
             </div>
         `;
+        item.addEventListener('click', (e) => {
+            // Avoid triggering if a button inside the item was clicked
+            if (e.target.classList.contains('btn')) return;
+            currentSelectedIncidentIdForFil = incident.id;
+            const contextDisplay = document.getElementById('communication-context-incident-id');
+            if (contextDisplay) {
+                contextDisplay.textContent = `Fil des Événements pour l'Incident : #${incident.id} - ${incident.titre || 'Titre inconnu'}`;
+            }
+            showNotification(`Contexte "Fil des Événements" réglé sur l'incident #${incident.id}`, 'info');
+            // If communication page is already active, refresh its content
+            if (communicationPage && communicationPage.classList.contains('active')) {
+                loadFilEvenements(currentSelectedIncidentIdForFil);
+            }
+        });
         newTimelineContainer.appendChild(item);
     });
 
@@ -299,6 +313,8 @@ let mainCourante = [
 let currentPage = 'dashboard';
 let filteredActions = [...actions];
 
+let currentSelectedIncidentIdForFil = null; // Will hold the ID of the incident whose feed is being viewed
+
 const editIncidentModal = document.getElementById('edit-incident-modal');
 const editIncidentForm = document.getElementById('edit-incident-form');
 const editIncidentErrorMessage = document.getElementById('edit-incident-error-message');
@@ -334,6 +350,11 @@ const editActionDateFinExecutionField = document.getElementById('edit-action-dat
 const editActionTempsEstimeField = document.getElementById('edit-action-temps-estime');
 const editActionTempsReelField = document.getElementById('edit-action-temps-reel');
 const editActionCommentairesField = document.getElementById('edit-action-commentaires');
+
+const filEvenementsList = document.getElementById('fil-evenements-list');
+const addEntreeFilForm = document.getElementById('add-entree-fil-form');
+const newEntreeFilContenu = document.getElementById('new-entree-fil-contenu');
+const communicationPage = document.getElementById('communication'); // To detect when page is active
 
 
 async function openEditIncidentModal(incidentId) {
@@ -481,6 +502,102 @@ async function handleDeleteAction(actionId) {
     }
 }
 
+function renderFilEvenements(entries) {
+    if (!filEvenementsList) return;
+    filEvenementsList.innerHTML = ''; // Clear previous entries
+
+    if (!entries || entries.length === 0) {
+        filEvenementsList.innerHTML = '<p>Aucune entrée dans le fil des événements pour cet incident ou incident non sélectionné.</p>';
+        return;
+    }
+
+    entries.forEach(entry => {
+        const item = document.createElement('div');
+        item.className = 'fil-entree-item'; // Use class defined in CSS
+
+        const authorName = (entry.auteur_nom || entry.auteur_prenom)
+                           ? `${entry.auteur_prenom || ''} ${entry.auteur_nom || ''}`.trim()
+                           : (entry.auteur_email || `Auteur ID: ${entry.auteur_id}`);
+
+        const entryDate = entry.timestamp_creation ? formatDate(entry.timestamp_creation) : 'Date inconnue'; // formatDate is an existing utility
+
+        let detailsHTML = '';
+        if (entry.type_entree || entry.criticite) {
+            detailsHTML = '<div class="fil-entree-details">';
+            if (entry.type_entree) detailsHTML += `<span>Type: ${entry.type_entree}</span>`;
+            if (entry.criticite) detailsHTML += `<span>Criticité: ${entry.criticite}</span>`;
+            detailsHTML += '</div>';
+        }
+
+        item.innerHTML = `
+            <div class="fil-entree-header">
+                <span class="fil-entree-auteur">${authorName}</span>
+                <span class="fil-entree-timestamp">${entryDate}</span>
+            </div>
+            <p class="fil-entree-contenu">${entry.contenu || ''}</p>
+            ${detailsHTML}
+        `;
+        filEvenementsList.appendChild(item);
+    });
+}
+
+async function loadFilEvenements(incidentId) {
+    const contextDisplay = document.getElementById('communication-context-incident-id');
+    if (!incidentId) {
+        renderFilEvenements([]);
+        if (contextDisplay) {
+            contextDisplay.textContent = 'Veuillez sélectionner un incident pour afficher son Fil des Événements.';
+        }
+        console.warn('loadFilEvenements called without incidentId.');
+        return;
+    }
+    // If incidentId is present, the contextDisplay should ideally already be set by the click handler in renderIncidents.
+    // However, if navigating directly or loading state, this ensures it's updated if it wasn't.
+    // To avoid fetching incident title again here if not necessary, this part is tricky.
+    // The click handler in renderIncidents is better for setting title.
+    // This function will primarily just load the data. If contextDisplay is still default, it means no incident was clicked yet.
+    if (contextDisplay && contextDisplay.textContent.includes('Veuillez sélectionner')) {
+         // This implies we might not have the title readily available here without another fetch or global incident list.
+         // For now, we'll just show the ID if the title isn't already part of the text.
+         // If the title is essential here, an additional fetch for incident details might be needed,
+         // or ensure the title is passed around or stored globally when an incident is selected.
+         // For now, let's assume the click handler in renderIncidents is the primary source of title.
+         // So, if we reach here and incidentId is set, but text is still default, it means direct navigation or page reload.
+         // We can try to get the title from a global list if available, or just show ID.
+         const currentIncident = typeof incidents !== 'undefined' ? incidents.find(inc => inc.id === incidentId) : null;
+         if (currentIncident) {
+            contextDisplay.textContent = `Fil des Événements pour l'Incident : #${incidentId} - ${currentIncident.titre || 'Titre inconnu'}`;
+         } else {
+            // If not found in a global list, just show ID. A full solution might fetch title.
+            contextDisplay.textContent = `Fil des Événements pour l'Incident : #${incidentId}`;
+         }
+    }
+
+
+    if (!filEvenementsList) return;
+    filEvenementsList.innerHTML = '<p>Chargement du fil des événements...</p>';
+
+    try {
+        const token = localStorage.getItem('gestcyber_token');
+        const response = await fetch(`${API_BASE_URL}/fil-evenements?incidentId=${incidentId}`, {
+            headers: { ...(token && { 'x-auth-token': token }) }
+        });
+
+        if (!response.ok) {
+            const errData = await response.json().catch(() => ({}));
+            showNotification(`Erreur: Impossible de charger le fil des événements. ${errData.msg || response.statusText}`, 'error');
+            renderFilEvenements([]);
+            return;
+        }
+        const entries = await response.json();
+        renderFilEvenements(entries);
+    } catch (error) {
+        console.error('Error loading fil des événements:', error);
+        showNotification("Erreur de connexion lors du chargement du fil des événements.", 'error');
+        renderFilEvenements([]);
+    }
+}
+
 
 function updateUIForLoggedInState() {
     const token = localStorage.getItem('gestcyber_token');
@@ -581,6 +698,104 @@ document.addEventListener('DOMContentLoaded', function() {
             if (e.target === loginModal) {
                 loginModal.classList.remove('show');
                 if (loginErrorMessage) loginErrorMessage.style.display = 'none'; // Clear error
+            }
+        });
+    }
+
+    // Initial load for Fil des Événements if communication page is active by default
+    if (communicationPage && communicationPage.classList.contains('active')) {
+        loadFilEvenements(currentSelectedIncidentIdForFil);
+    }
+
+    // Form handler for adding new "Fil des Événements" entries
+    if (addEntreeFilForm) {
+        addEntreeFilForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!newEntreeFilContenu || newEntreeFilContenu.value.trim() === '') {
+                showNotification('Veuillez saisir un contenu pour l\'entrée.', 'error');
+                return;
+            }
+            if (!currentSelectedIncidentIdForFil) {
+                showNotification('Veuillez sélectionner un incident avant d\'ajouter une entrée.', 'error');
+                return;
+            }
+
+            const contenu = newEntreeFilContenu.value.trim();
+
+            try {
+                const token = localStorage.getItem('gestcyber_token');
+                const response = await fetch(`${API_BASE_URL}/fil-evenements`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(token && { 'x-auth-token': token })
+                    },
+                    body: JSON.stringify({
+                        incident_id: currentSelectedIncidentIdForFil,
+                        contenu: contenu
+                    })
+                });
+
+                const responseData = await response.json();
+                if (!response.ok) {
+                    showNotification(`Erreur: Impossible d'ajouter l'entrée. ${responseData.msg || response.statusText}`, 'error');
+                    return;
+                }
+                showNotification('Entrée ajoutée au fil des événements avec succès !', 'success');
+                newEntreeFilContenu.value = ''; // Clear textarea
+                await loadFilEvenements(currentSelectedIncidentIdForFil); // Refresh list
+            } catch (error) {
+                console.error('Error adding entree fil:', error);
+                showNotification("Erreur de connexion lors de l'ajout de l'entrée.", 'error');
+            }
+        });
+    }
+
+    // Initial load for Fil des Événements if communication page is active by default
+    if (communicationPage && communicationPage.classList.contains('active')) {
+        loadFilEvenements(currentSelectedIncidentIdForFil);
+    }
+
+    // Form handler for adding new "Fil des Événements" entries
+    if (addEntreeFilForm) {
+        addEntreeFilForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!newEntreeFilContenu || newEntreeFilContenu.value.trim() === '') {
+                showNotification('Veuillez saisir un contenu pour l\'entrée.', 'error');
+                return;
+            }
+            if (!currentSelectedIncidentIdForFil) {
+                showNotification('Veuillez sélectionner un incident avant d\'ajouter une entrée.', 'error');
+                return;
+            }
+
+            const contenu = newEntreeFilContenu.value.trim();
+
+            try {
+                const token = localStorage.getItem('gestcyber_token');
+                const response = await fetch(`${API_BASE_URL}/fil-evenements`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(token && { 'x-auth-token': token })
+                    },
+                    body: JSON.stringify({
+                        incident_id: currentSelectedIncidentIdForFil,
+                        contenu: contenu
+                    })
+                });
+
+                const responseData = await response.json();
+                if (!response.ok) {
+                    showNotification(`Erreur: Impossible d'ajouter l'entrée. ${responseData.msg || response.statusText}`, 'error');
+                    return;
+                }
+                showNotification('Entrée ajoutée au fil des événements avec succès !', 'success');
+                newEntreeFilContenu.value = ''; // Clear textarea
+                await loadFilEvenements(currentSelectedIncidentIdForFil); // Refresh list
+            } catch (error) {
+                console.error('Error adding entree fil:', error);
+                showNotification("Erreur de connexion lors de l'ajout de l'entrée.", 'error');
             }
         });
     }
@@ -745,34 +960,25 @@ document.addEventListener('DOMContentLoaded', function() {
     // Logout Button Event Listener
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
-            localStorage.removeItem('gestcyber_token'); // Remove the token
-            showNotification('Déconnexion réussie.', 'info'); // Corrected: Déconnexion réussie.
-            updateUIForLoggedInState(); // Update UI to logged-out state
+            localStorage.removeItem('gestcyber_token');
+            showNotification('Déconnexion réussie.', 'info');
+            updateUIForLoggedInState();
 
-            // Clear dashboard incidents or reset to a default logged-out view
             const timelineContainer = document.querySelector('#dashboard .timeline-recent .timeline');
             if (timelineContainer) {
-                timelineContainer.innerHTML = '<p>Veuillez vous connecter pour voir les incidents.</p>'; // Corrected: Veuillez vous connecter...
+                timelineContainer.innerHTML = '<p>Veuillez vous connecter pour voir les incidents.</p>';
             } else {
-                // If the specific container isn't found, you might want a more general way
-                // to signal that the dashboard needs to be cleared or re-rendered for a logged-out state.
-                // For now, this targets the known structure.
                 const statusOverviewCardBody = document.querySelector('#dashboard .status-overview .card__body');
                 if (statusOverviewCardBody) {
                     statusOverviewCardBody.innerHTML = '<p style="text-align: center;">Veuillez vous connecter.</p>';
                 }
             }
 
-            // Optionally, if other parts of the UI show user-specific data, clear them here.
-            // For example, if a user's name/email was displayed in the sidebar:
-            // const userInfoDisplay = document.getElementById('user-info-display');
-            // if (userInfoDisplay) {
-            //    userInfoDisplay.remove();
-            // }
-
-            // If login modal is not automatically shown by updateUIForLoggedInState,
-            // you might want to explicitly show it here or ensure loginBtn is clickable.
-            // loginModal.classList.add('show'); // Or rely on user clicking loginBtn
+            const contextDisplayLogout = document.getElementById('communication-context-incident-id');
+            if (contextDisplayLogout) {
+                contextDisplayLogout.textContent = 'Veuillez vous connecter et sélectionner un incident.';
+            }
+            currentSelectedIncidentIdForFil = null; // Explicitly nullify
         });
     }
 
@@ -848,6 +1054,53 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Call this new function at the end of DOMContentLoaded
     checkAuthStateOnLoad();
+
+    // Form handler for adding new "Fil des Événements" entries
+    if (addEntreeFilForm) {
+        addEntreeFilForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!newEntreeFilContenu || newEntreeFilContenu.value.trim() === '') {
+                showNotification('Veuillez saisir un contenu pour l\'entrée.', 'error');
+                return;
+            }
+            if (!currentSelectedIncidentIdForFil) {
+                showNotification('Veuillez sélectionner un incident avant d\'ajouter une entrée.', 'error');
+                return;
+            }
+
+            const contenu = newEntreeFilContenu.value.trim();
+            // Optional: Add fields to the form for type_entree, destinataires, criticite if desired
+            // const type_entree = document.getElementById('new-entree-fil-type').value;
+
+            try {
+                const token = localStorage.getItem('gestcyber_token');
+                const response = await fetch(`${API_BASE_URL}/fil-evenements`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(token && { 'x-auth-token': token })
+                    },
+                    body: JSON.stringify({
+                        incident_id: currentSelectedIncidentIdForFil,
+                        contenu: contenu
+                        // type_entree: type_entree, // if added
+                    })
+                });
+
+                const responseData = await response.json();
+                if (!response.ok) {
+                    showNotification(`Erreur: Impossible d'ajouter l'entrée. ${responseData.msg || response.statusText}`, 'error');
+                    return;
+                }
+                showNotification('Entrée ajoutée au fil des événements avec succès !', 'success');
+                newEntreeFilContenu.value = ''; // Clear textarea
+                await loadFilEvenements(currentSelectedIncidentIdForFil); // Refresh list
+            } catch (error) {
+                console.error('Error adding entree fil:', error);
+                showNotification("Erreur de connexion lors de l'ajout de l'entrée.", 'error');
+            }
+        });
+    }
 
     // Delegated event listeners for edit/delete action buttons
     const actionsListContainer = document.getElementById('actions-list');
@@ -949,6 +1202,64 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    // Initial load for Fil des Événements if communication page is active by default
+    // This check should be after checkAuthStateOnLoad has potentially updated UI and loaded dashboard data
+    if (communicationPage && communicationPage.classList.contains('active') && currentSelectedIncidentIdForFil) {
+        loadFilEvenements(currentSelectedIncidentIdForFil);
+    } else if (communicationPage && communicationPage.classList.contains('active')) {
+        // If comms page is active but no incident selected yet, ensure placeholder is shown
+        renderFilEvenements([]);
+        const contextDisplay = document.getElementById('communication-context-incident-id');
+        if (contextDisplay) {
+            contextDisplay.textContent = 'Veuillez sélectionner un incident pour afficher son Fil des Événements.';
+        }
+    }
+
+
+    // Form handler for adding new "Fil des Événements" entries
+    if (addEntreeFilForm) {
+        addEntreeFilForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            if (!newEntreeFilContenu || newEntreeFilContenu.value.trim() === '') {
+                showNotification('Veuillez saisir un contenu pour l\'entrée.', 'error');
+                return;
+            }
+            if (!currentSelectedIncidentIdForFil) {
+                showNotification('Veuillez sélectionner un incident avant d\'ajouter une entrée.', 'error');
+                return;
+            }
+
+            const contenu = newEntreeFilContenu.value.trim();
+
+            try {
+                const token = localStorage.getItem('gestcyber_token');
+                const response = await fetch(`${API_BASE_URL}/fil-evenements`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        ...(token && { 'x-auth-token': token })
+                    },
+                    body: JSON.stringify({
+                        incident_id: currentSelectedIncidentIdForFil,
+                        contenu: contenu
+                    })
+                });
+
+                const responseData = await response.json();
+                if (!response.ok) {
+                    showNotification(`Erreur: Impossible d'ajouter l'entrée. ${responseData.msg || response.statusText}`, 'error');
+                    return;
+                }
+                showNotification('Entrée ajoutée au fil des événements avec succès !', 'success');
+                newEntreeFilContenu.value = ''; // Clear textarea
+                await loadFilEvenements(currentSelectedIncidentIdForFil); // Refresh list
+            } catch (error) {
+                console.error('Error adding entree fil:', error);
+                showNotification("Erreur de connexion lors de l'ajout de l'entrée.", 'error');
+            }
+        });
+    }
 });
 
 // Navigation
@@ -976,6 +1287,28 @@ function initializeNavigation() {
                 setTimeout(initializeCharts, 100);
             } else if (targetPage === 'dashboard') {
                 loadDashboardData(); // Load data when dashboard becomes active
+            } else if (targetPage === 'communication') {
+                const contextDisplayCommPage = document.getElementById('communication-context-incident-id');
+                if (currentSelectedIncidentIdForFil) {
+                    // Attempt to get title from a potentially available global 'incidents' array (loaded by dashboard)
+                    let incidentTitle = 'Titre inconnu';
+                    const globalIncidentsList = typeof incidents !== 'undefined' ? incidents : (typeof window.incidents !== 'undefined' ? window.incidents : []);
+
+                    if (Array.isArray(globalIncidentsList)) {
+                        const currentIncidentObj = globalIncidentsList.find(inc => inc.id === currentSelectedIncidentIdForFil);
+                        if (currentIncidentObj && currentIncidentObj.titre) {
+                            incidentTitle = currentIncidentObj.titre;
+                        }
+                    }
+                    if (contextDisplayCommPage) {
+                        contextDisplayCommPage.textContent = `Fil des Événements pour l'Incident : #${currentSelectedIncidentIdForFil} - ${incidentTitle}`;
+                    }
+                } else {
+                    if (contextDisplayCommPage) {
+                        contextDisplayCommPage.textContent = 'Veuillez sélectionner un incident pour afficher son Fil des Événements.';
+                    }
+                }
+                loadFilEvenements(currentSelectedIncidentIdForFil);
             }
         });
     });
