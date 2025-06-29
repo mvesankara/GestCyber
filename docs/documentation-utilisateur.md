@@ -4,166 +4,166 @@
 
 ### ð¯ Objectif de l'application
 
-GestCyber est une plateforme de gestion de crise cyber conforme aux recommandations ANSSI. Elle permet de coordonner efficacement la rÃ©ponse Ã  un incident cyber selon les 4 phases officielles :
+GestCyber est une plateforme de gestion de crise cyber conforme aux recommandations ANSSI. Elle permet de coordonner efficacement la reponse a un incident cyber selon les 4 phases officielles :
 
 1. **Phase 1** : Alerter, mobiliser et endiguer
 2. **Phase 2** : Maintenir la confiance et comprendre l'attaque
-3. **Phase 3** : Relancer les activitÃ©s et durcir les SI
-4. **Phase 4** : Tirer les leÃ§ons et capitaliser
+3. **Phase 3** : Relancer les activites et durcir les SI
+4. **Phase 4** : Tirer les lecons et capitaliser
 
 ## ð  Page d'accueil - Dashboard
 
 ### Vue d'ensemble
 
-Le dashboard principal offre une vue consolidÃ©e de la situation de crise :
+Le dashboard principal offre une vue consolidee de la situation de crise :
 
 #### Indicateurs de statut
-- **ð¢ Normal** : Fonctionnement normal des systÃ¨mes
-- **ð¡ Alerte** : Surveillance renforcÃ©e, incident mineur dÃ©tectÃ©
-- **ð  Crise** : Incident majeur en cours nÃ©cessitant une cellule de crise
-- **ð´ Critique** : Paralysie totale des activitÃ©s, situation d'urgence maximale
+- **ð¢ Normal** : Fonctionnement normal des systemes
+- **ð¡ Alerte** : Surveillance renforcee, incident mineur detecte
+- **ð  Crise** : Incident majeur en cours necessitant une cellule de crise
+- **ð´ Critique** : Paralysie totale des activites, situation d'urgence maximale
 
-#### MÃ©triques temps rÃ©el
-- **Temps Ã©coulÃ© depuis le dÃ©but de l'incident**
+#### Metriques temps reel
+- **Temps ecoule depuis le debut de l'incident**
 - **Phase actuelle de gestion de crise**
-- **Nombre d'actions en cours / terminÃ©es**
-- **Ãquipes mobilisÃ©es**
-- **SystÃ¨mes affectÃ©s**
+- **Nombre d'actions en cours / terminees**
+- **Equipes mobilisees**
+- **Systemes affectes**
 
-#### Timeline des Ã©vÃ©nements
-Affichage chronologique des Ã©vÃ©nements majeurs de la crise avec :
-- Horodatage prÃ©cis
-- Type d'Ã©vÃ©nement (dÃ©tection, action, communication)
+#### Timeline des evenements
+Affichage chronologique des evenements majeurs de la crise avec :
+- Horodatage precis
+- Type d'evenement (detection, action, communication)
 - Responsable de l'action
-- Statut (en cours, terminÃ©, bloquÃ©)
+- Statut (en cours, termine, bloque)
 
 ### Navigation
-Le menu latÃ©ral permet d'accÃ©der aux diffÃ©rents modules :
+Le menu lateral permet d'acceder aux differents modules :
 - ð **Dashboard** : Vue d'ensemble
-- â **Actions** : Gestion des tÃ¢ches
+- â **Actions** : Gestion des taches
 - ð¬ **Communication** : Centre de communication
 - ð **Investigation** : Analyse technique
 - ð§ **Reconstruction** : Remise en service
-- ð **Reporting** : Rapports et mÃ©triques
+- ð **Reporting** : Rapports et metriques
 
 ## â Module Actions
 
-### Vue gÃ©nÃ©rale
-Le module Actions centralise toutes les tÃ¢ches Ã  rÃ©aliser pendant la crise.
+### Vue generale
+Le module Actions centralise toutes les taches a realiser pendant la crise.
 
-#### CrÃ©ation d'une nouvelle action
+#### Creation d'une nouvelle action
 1. Cliquer sur **"Nouvelle Action"**
 2. Remplir le formulaire :
    - **Titre** : Description claire de l'action
-   - **Phase ANSSI** : SÃ©lectionner la phase correspondante (1-4)
-   - **PrioritÃ©** : P0 (critique), P1 (Ã©levÃ©e), P2 (moyenne), P3 (faible)
-   - **Ãquipe responsable** : Cellule stratÃ©gique, Cyber-IT, MÃ©tiers, Communication, Juridique
-   - **ÃchÃ©ance** : Date et heure limite
-   - **Description dÃ©taillÃ©e** : Instructions prÃ©cises
-3. Cliquer sur **"CrÃ©er l'action"**
+   - **Phase ANSSI** : Selectionner la phase correspondante (1-4)
+   - **Priorite** : P0 (critique), P1 (elevee), P2 (moyenne), P3 (faible)
+   - **Equipe responsable** : Cellule strategique, Cyber-IT, Metiers, Communication, Juridique
+   - **Echeance** : Date et heure limite
+   - **Description detaillee** : Instructions precises
+3. Cliquer sur **"Creer l'action"**
 
 #### Gestion des actions existantes
 
 ##### Filtrage et tri
-- **Par phase** : Afficher uniquement les actions d'une phase spÃ©cifique
-- **Par prioritÃ©** : Trier par ordre de criticitÃ©
-- **Par Ã©quipe** : Filtrer par Ã©quipe responsable
-- **Par statut** : Ã faire, En cours, TerminÃ©, BloquÃ©
+- **Par phase** : Afficher uniquement les actions d'une phase specifique
+- **Par priorite** : Trier par ordre de criticite
+- **Par equipe** : Filtrer par equipe responsable
+- **Par statut** : A faire, En cours, Termine, Bloque
 
 ##### Statuts des actions
-- **ð´ Ã faire** : Action crÃ©Ã©e, pas encore dÃ©marrÃ©e
-- **ð¡ En cours** : Action en cours de rÃ©alisation
-- **ð¢ TerminÃ©** : Action complÃ©tÃ©e avec succÃ¨s
-- **â« BloquÃ©** : Action bloquÃ©e, nÃ©cessite intervention
+- **ð´ A faire** : Action creee, pas encore demarree
+- **ð¡ En cours** : Action en cours de realisation
+- **ð¢ Termine** : Action completee avec succes
+- **â« Bloque** : Action bloquee, necessite intervention
 
 ##### Modification d'une action
 1. Cliquer sur l'action dans la liste
-2. Modifier les champs nÃ©cessaires
+2. Modifier les champs necessaires
 3. Ajouter des commentaires de suivi
-4. Mettre Ã  jour le statut
+4. Mettre a jour le statut
 5. Sauvegarder les modifications
 
 #### Escalade automatique
-- Les actions P0 non traitÃ©es dans les 30 minutes gÃ©nÃ¨rent une alerte
-- Les actions P1 non traitÃ©es dans les 2 heures gÃ©nÃ¨rent une notification
-- Notification automatique aux responsables hiÃ©rarchiques
+- Les actions P0 non traitees dans les 30 minutes generent une alerte
+- Les actions P1 non traitees dans les 2 heures generent une notification
+- Notification automatique aux responsables hierarchiques
 
 ## ð¬ Module Communication
 
-### Main courante partagÃ©e
-Registre central de tous les Ã©vÃ©nements et communications :
+### Main courante partagee
+Registre central de tous les evenements et communications :
 
-#### Ajout d'une entrÃ©e
-1. Cliquer sur **"Nouvelle entrÃ©e"**
-2. SÃ©lectionner le type :
-   - **Information** : Information gÃ©nÃ©rale
-   - **DÃ©cision** : DÃ©cision prise par la cellule de crise
-   - **Communication** : Message envoyÃ© Ã  des parties prenantes
+#### Ajout d'une entree
+1. Cliquer sur **"Nouvelle entree"**
+2. Selectionner le type :
+   - **Information** : Information generale
+   - **Decision** : Decision prise par la cellule de crise
+   - **Communication** : Message envoye a des parties prenantes
    - **Alerte** : Information urgente
-3. RÃ©diger le contenu
+3. Rediger le contenu
 4. Attribuer l'importance (Normal, Important, Critique)
-5. Valider l'entrÃ©e
+5. Valider l'entree
 
 #### Recherche et filtrage
-- Recherche par mots-clÃ©s
+- Recherche par mots-cles
 - Filtrage par date/heure
-- Filtrage par type d'entrÃ©e
+- Filtrage par type d'entree
 - Filtrage par auteur
 
 ### Gestion des communications externes
 
 #### Templates de messages
-Messages prÃ©-approuvÃ©s pour diffÃ©rentes situations :
-- **Notification d'incident** aux autoritÃ©s (ANSSI, CNIL)
-- **Communication client** sur l'indisponibilitÃ© de services
-- **CommuniquÃ© de presse** en cas de mÃ©diatisation
+Messages pre-approuves pour differentes situations :
+- **Notification d'incident** aux autorites (ANSSI, CNIL)
+- **Communication client** sur l'indisponibilite de services
+- **Communique de presse** en cas de mediatisation
 - **Information partenaires** sur les impacts
 
 #### Annuaire de crise
-- **Contacts internes** : Ãquipes, responsables, experts
-- **Contacts externes** : AutoritÃ©s, prestataires, mÃ©dias
-- **Contacts d'urgence** : NumÃ©ros prioritaires 24/7
+- **Contacts internes** : Equipes, responsables, experts
+- **Contacts externes** : Autorites, prestataires, medias
+- **Contacts d'urgence** : Numeros prioritaires 24/7
 - **Canaux alternatifs** : Moyens de communication de secours
 
-### Suivi des dÃ©clarations obligatoires
-- **ANSSI** : DÃ©claration d'incident de sÃ©curitÃ©
-- **CNIL** : Notification de violation de donnÃ©es personnelles
-- **AutoritÃ©s judiciaires** : DÃ©pÃ´t de plainte
-- **Assurances** : DÃ©claration de sinistre
+### Suivi des declarations obligatoires
+- **ANSSI** : Declaration d'incident de securite
+- **CNIL** : Notification de violation de donnees personnelles
+- **Autorites judiciaires** : Depot de plainte
+- **Assurances** : Declaration de sinistre
 
 ## ð Module Investigation
 
 ### Cartographie de la compromission
 
-#### Vue systÃ¨me
-- **SystÃ¨mes compromis** : Liste des serveurs/applications affectÃ©s
-- **PÃ©rimÃ¨tre d'impact** : Ãtendue gÃ©ographique et technique
-- **Vecteur d'attaque** : Point d'entrÃ©e identifiÃ©
+#### Vue systeme
+- **Systemes compromis** : Liste des serveurs/applications affectes
+- **Perimetre d'impact** : Etendue geographique et technique
+- **Vecteur d'attaque** : Point d'entree identifie
 - **Propagation** : Chemin de compromission
 
 #### Timeline de l'attaque
-1. **Point d'entrÃ©e** : Date/heure et mÃ©thode d'intrusion
-2. **Mouvement latÃ©ral** : Progression dans le rÃ©seau
-3. **Exfiltration** : Vol de donnÃ©es identifiÃ©
-4. **Impact final** : Chiffrement/destruction de donnÃ©es
+1. **Point d'entree** : Date/heure et methode d'intrusion
+2. **Mouvement lateral** : Progression dans le reseau
+3. **Exfiltration** : Vol de donnees identifie
+4. **Impact final** : Chiffrement/destruction de donnees
 
 ### Collecte des preuves
 
 #### Logs et traces
-- **Logs systÃ¨me** : ÃvÃ©nements Windows/Linux
-- **Logs rÃ©seau** : Trafic suspect identifiÃ©
+- **Logs systeme** : Evenements Windows/Linux
+- **Logs reseau** : Trafic suspect identifie
 - **Logs applicatifs** : Comportements anormaux
-- **Forensics** : Images disques et mÃ©moire
+- **Forensics** : Images disques et memoire
 
 #### Indicateurs de compromission (IoC)
 - **Adresses IP** malveillantes
-- **Domaines** utilisÃ©s par les attaquants
+- **Domaines** utilises par les attaquants
 - **Hash de fichiers** malveillants
-- **Signatures** d'attaque dÃ©tectÃ©es
+- **Signatures** d'attaque detectees
 
-### Analyse et corrÃ©lation
-- **Famille de malware** identifiÃ©e
-- **Techniques MITRE ATT&CK** utilisÃ©es
+### Analyse et correlation
+- **Famille de malware** identifiee
+- **Techniques MITRE ATT&CK** utilisees
 - **Attribution** (si possible)
 - **Motivations** de l'attaque
 
@@ -171,193 +171,193 @@ Messages prÃ©-approuvÃ©s pour diffÃ©rentes situations :
 
 ### Plan de remise en service
 
-#### Priorisation des systÃ¨mes
-- **P0 - Critique** : SystÃ¨mes vitaux (sauvegardes, AD, DNS)
-- **P1 - ÃlevÃ©e** : Applications mÃ©tier critiques
+#### Priorisation des systemes
+- **P0 - Critique** : Systemes vitaux (sauvegardes, AD, DNS)
+- **P1 - Elevee** : Applications metier critiques
 - **P2 - Moyenne** : Applications secondaires
-- **P3 - Faible** : SystÃ¨mes non-critiques
+- **P3 - Faible** : Systemes non-critiques
 
 #### Phases de reconstruction
-1. **PrÃ©paration** : Validation des sauvegardes saines
-2. **Isolement** : CrÃ©ation d'un environnement sÃ©curisÃ©
+1. **Preparation** : Validation des sauvegardes saines
+2. **Isolement** : Creation d'un environnement securise
 3. **Restauration** : Remise en service progressive
-4. **Tests** : Validation fonctionnelle et sÃ©curitaire
-5. **Production** : Retour en service surveillÃ©
+4. **Tests** : Validation fonctionnelle et securitaire
+5. **Production** : Retour en service surveille
 
 ### Suivi de la progression
 
-#### MÃ©triques de rÃ©cupÃ©ration
-- **RTO (Recovery Time Objective)** : Temps de remise en service visÃ©
-- **RPO (Recovery Point Objective)** : Perte de donnÃ©es maximale tolÃ©rÃ©e
-- **Temps rÃ©el de rÃ©cupÃ©ration** : Suivi en temps rÃ©el
-- **Pourcentage d'avancement** : Par systÃ¨me et global
+#### Metriques de recuperation
+- **RTO (Recovery Time Objective)** : Temps de remise en service vise
+- **RPO (Recovery Point Objective)** : Perte de donnees maximale toleree
+- **Temps reel de recuperation** : Suivi en temps reel
+- **Pourcentage d'avancement** : Par systeme et global
 
-#### Validation de sÃ©curitÃ©
-- **Tests de pÃ©nÃ©tration** : Validation de la sÃ©curisation
-- **Scan de vulnÃ©rabilitÃ©s** : Absence de failles critiques
-- **Configuration baseline** : Respect des standards de sÃ©curitÃ©
-- **Monitoring renforcÃ©** : Surveillance active post-remise en service
+#### Validation de securite
+- **Tests de penetration** : Validation de la securisation
+- **Scan de vulnerabilites** : Absence de failles critiques
+- **Configuration baseline** : Respect des standards de securite
+- **Monitoring renforce** : Surveillance active post-remise en service
 
-### Gestion des dÃ©rogations
-- **DÃ©rogations temporaires** : Mesures d'urgence documentÃ©es
-- **Risques acceptÃ©s** : Validation par la direction
-- **Plan de rÃ©gularisation** : Actions de mise en conformitÃ©
-- **Suivi des Ã©chÃ©ances** : Alertes sur les dÃ©rogations expirÃ©es
+### Gestion des derogations
+- **Derogations temporaires** : Mesures d'urgence documentees
+- **Risques acceptes** : Validation par la direction
+- **Plan de regularisation** : Actions de mise en conformite
+- **Suivi des echeances** : Alertes sur les derogations expirees
 
 ## ð Module Reporting
 
 ### Rapports de situation
 
-#### Rapport exÃ©cutif
-- **RÃ©sumÃ© de situation** : Statut actuel en 1 page
-- **Actions clÃ©s** : Principales dÃ©cisions et rÃ©alisations
-- **Prochaines Ã©tapes** : Planning des 24 prochaines heures
-- **Risques identifiÃ©s** : Points de vigilance
+#### Rapport executif
+- **Resume de situation** : Statut actuel en 1 page
+- **Actions cles** : Principales decisions et realisations
+- **Prochaines etapes** : Planning des 24 prochaines heures
+- **Risques identifies** : Points de vigilance
 
 #### Rapport technique
-- **Analyse de compromission** : DÃ©tails techniques
-- **Actions de remÃ©diation** : Mesures techniques prises
-- **Indicateurs de sÃ©curitÃ©** : MÃ©triques de protection
-- **Recommandations** : AmÃ©liorations suggÃ©rÃ©es
+- **Analyse de compromission** : Details techniques
+- **Actions de remediation** : Mesures techniques prises
+- **Indicateurs de securite** : Metriques de protection
+- **Recommandations** : Ameliorations suggerees
 
-### MÃ©triques de performance
+### Metriques de performance
 
 #### Indicateurs de gestion de crise
-- **Temps de dÃ©tection** : DÃ©lai entre incident et dÃ©tection
-- **Temps de rÃ©action** : DÃ©lai entre dÃ©tection et premiÃ¨re action
-- **Temps de rÃ©solution** : DurÃ©e totale de l'incident
-- **EfficacitÃ© des Ã©quipes** : Ratio actions terminÃ©es/crÃ©Ã©es
+- **Temps de detection** : Delai entre incident et detection
+- **Temps de reaction** : Delai entre detection et premiere action
+- **Temps de resolution** : Duree totale de l'incident
+- **Efficacite des equipes** : Ratio actions terminees/creees
 
-#### Indicateurs opÃ©rationnels
-- **DisponibilitÃ© des services** : Pourcentage de temps d'uptime
-- **Performance des Ã©quipes** : Respect des Ã©chÃ©ances
-- **QualitÃ© de la communication** : Indicateurs de satisfaction
-- **CoÃ»t de la crise** : Impact financier global
+#### Indicateurs operationnels
+- **Disponibilite des services** : Pourcentage de temps d'uptime
+- **Performance des equipes** : Respect des echeances
+- **Qualite de la communication** : Indicateurs de satisfaction
+- **Cout de la crise** : Impact financier global
 
-### RETEX (Retour d'expÃ©rience)
+### RETEX (Retour d'experience)
 
 #### Collecte des retours
-- **Questionnaires Ã©quipes** : Feedback des intervenants
-- **Analyse des dysfonctionnements** : Points d'amÃ©lioration
-- **Bonnes pratiques** : Actions particuliÃ¨rement efficaces
-- **Recommandations** : AmÃ©liorations pour l'avenir
+- **Questionnaires equipes** : Feedback des intervenants
+- **Analyse des dysfonctionnements** : Points d'amelioration
+- **Bonnes pratiques** : Actions particulierement efficaces
+- **Recommandations** : Ameliorations pour l'avenir
 
-#### Plan d'amÃ©lioration
-- **Actions correctives** : Mesures immÃ©diates
-- **Actions prÃ©ventives** : PrÃ©vention d'incidents similaires
-- **Formation** : Besoins de renforcement des compÃ©tences
-- **Ãvolution des procÃ©dures** : Mises Ã  jour nÃ©cessaires
+#### Plan d'amelioration
+- **Actions correctives** : Mesures immediates
+- **Actions preventives** : Prevention d'incidents similaires
+- **Formation** : Besoins de renforcement des competences
+- **Evolution des procedures** : Mises a jour necessaires
 
 ## ð¨ Gestion d'un nouvel incident
 
-### ProcÃ©dure de dÃ©clenchement
+### Procedure de declenchement
 
-#### 1. DÃ©tection d'incident
-- Cliquer sur **"ð¨ Nouveau Incident"** dans la barre latÃ©rale
-- Remplir le formulaire de dÃ©claration :
-  - **Date/heure de dÃ©tection**
-  - **Type d'incident** (Ransomware, Vol de donnÃ©es, DDoS, etc.)
-  - **SystÃ¨mes impactÃ©s**
-  - **Niveau de criticitÃ©** initial
-  - **PremiÃ¨res observations**
+#### 1. Detection d'incident
+- Cliquer sur **"ð¨ Nouveau Incident"** dans la barre laterale
+- Remplir le formulaire de declaration :
+  - **Date/heure de detection**
+  - **Type d'incident** (Ransomware, Vol de donnees, DDoS, etc.)
+  - **Systemes impactes**
+  - **Niveau de criticite** initial
+  - **Premieres observations**
 
 #### 2. Activation automatique
-L'application gÃ©nÃ¨re automatiquement :
+L'application genere automatiquement :
 - **Actions de phase 1** : Mobilisation, isolation, alerte
-- **Timeline d'incident** : Horodatage des Ã©vÃ©nements
-- **Cellule de crise** : Notification des Ã©quipes
+- **Timeline d'incident** : Horodatage des evenements
+- **Cellule de crise** : Notification des equipes
 - **Communication** : Templates de messages
 
 #### 3. Escalade
-Selon la criticitÃ©, notification automatique :
-- **Direction gÃ©nÃ©rale** pour incidents critiques
-- **Ãquipes techniques** pour incidents majeurs
-- **Parties prenantes** selon les procÃ©dures
+Selon la criticite, notification automatique :
+- **Direction generale** pour incidents critiques
+- **Equipes techniques** pour incidents majeurs
+- **Parties prenantes** selon les procedures
 
 ### Workflow type d'incident
 
 #### Phase 1 : Alerter, mobiliser et endiguer (0-4h)
-1. **Confirmer l'incident** et Ã©valuer la criticitÃ©
-2. **Activer la cellule de crise** stratÃ©gique
-3. **Isoler les systÃ¨mes** compromis
-4. **Alerter les autoritÃ©s** (ANSSI, CNIL si applicable)
-5. **Mobiliser les Ã©quipes** techniques et mÃ©tiers
+1. **Confirmer l'incident** et evaluer la criticite
+2. **Activer la cellule de crise** strategique
+3. **Isoler les systemes** compromis
+4. **Alerter les autorites** (ANSSI, CNIL si applicable)
+5. **Mobiliser les equipes** techniques et metiers
 
 #### Phase 2 : Maintenir la confiance et comprendre l'attaque (4h-48h)
 1. **Communiquer** avec les parties prenantes
 2. **Investiguer** pour comprendre l'attaque
-3. **Identifier le pÃ©rimÃ¨tre** de compromission
-4. **Mettre en place** le mode dÃ©gradÃ©
-5. **Analyser les impacts** mÃ©tiers
+3. **Identifier le perimetre** de compromission
+4. **Mettre en place** le mode degrade
+5. **Analyser les impacts** metiers
 
-#### Phase 3 : Relancer les activitÃ©s et durcir les SI (2-30 jours)
-1. **Durcir** les systÃ¨mes selon les vulnÃ©rabilitÃ©s identifiÃ©es
-2. **Restaurer** les donnÃ©es Ã  partir de sauvegardes saines
+#### Phase 3 : Relancer les activites et durcir les SI (2-30 jours)
+1. **Durcir** les systemes selon les vulnerabilites identifiees
+2. **Restaurer** les donnees a partir de sauvegardes saines
 3. **Tester** les applications avant remise en production
-4. **Surveiller** les systÃ¨mes restaurÃ©s
-5. **Reprendre** progressivement les activitÃ©s
+4. **Surveiller** les systemes restaures
+5. **Reprendre** progressivement les activites
 
-#### Phase 4 : Tirer les leÃ§ons et capitaliser (aprÃ¨s rÃ©solution)
-1. **Organiser** le retour d'expÃ©rience (RETEX)
+#### Phase 4 : Tirer les lecons et capitaliser (apres resolution)
+1. **Organiser** le retour d'experience (RETEX)
 2. **Analyser** les dysfonctionnements et bonnes pratiques
-3. **DÃ©finir** un plan d'amÃ©lioration
-4. **Former** les Ã©quipes sur les leÃ§ons apprises
-5. **Mettre Ã  jour** les procÃ©dures et outils
+3. **Definir** un plan d'amelioration
+4. **Former** les equipes sur les lecons apprises
+5. **Mettre a jour** les procedures et outils
 
 ## âï¸ Configuration et personnalisation
 
-### ParamÃ¨tres utilisateur
-- **Profil** : RÃ´le dans l'organisation (StratÃ©gique, Technique, MÃ©tier)
-- **Notifications** : Types d'alertes Ã  recevoir
-- **Interface** : PrÃ©fÃ©rences d'affichage (mode sombre, langue)
-- **Raccourcis** : Actions rapides personnalisÃ©es
+### Parametres utilisateur
+- **Profil** : Role dans l'organisation (Strategique, Technique, Metier)
+- **Notifications** : Types d'alertes a recevoir
+- **Interface** : Preferences d'affichage (mode sombre, langue)
+- **Raccourcis** : Actions rapides personnalisees
 
-### ParamÃ¨tres organisation
-- **Contacts** : Annuaire de crise spÃ©cifique
-- **ProcÃ©dures** : Adaptation aux processus internes
-- **Seuils d'alerte** : CritÃ¨res de dÃ©clenchement personnalisÃ©s
-- **Templates** : Messages adaptÃ©s au contexte
+### Parametres organisation
+- **Contacts** : Annuaire de crise specifique
+- **Procedures** : Adaptation aux processus internes
+- **Seuils d'alerte** : Criteres de declenchement personnalises
+- **Templates** : Messages adaptes au contexte
 
 ## ð Support et aide
 
 ### Aide contextuelle
-- **Bouton "?"** : Aide sur chaque Ã©cran
+- **Bouton "?"** : Aide sur chaque ecran
 - **Tooltips** : Explications des champs et fonctions
-- **Guides intÃ©grÃ©s** : ProcÃ©dures pas-Ã -pas
-- **FAQ** : Questions frÃ©quentes
+- **Guides integres** : Procedures pas-a-pas
+- **FAQ** : Questions frequentes
 
-### En cas de problÃ¨me technique
+### En cas de probleme technique
 1. **Actualiser** la page (F5)
 2. **Vider le cache** du navigateur
-3. **VÃ©rifier la connexion** internet
-4. **Contacter** l'administrateur systÃ¨me
+3. **Verifier la connexion** internet
+4. **Contacter** l'administrateur systeme
 
-### Formation recommandÃ©e
+### Formation recommandee
 - **Formation initiale** : 2 heures sur l'utilisation de base
-- **Formation avancÃ©e** : 4 heures sur toutes les fonctionnalitÃ©s
+- **Formation avancee** : 4 heures sur toutes les fonctionnalites
 - **Exercices pratiques** : Simulations d'incidents
-- **Mise Ã  jour** : Formation continue sur les Ã©volutions
+- **Mise a jour** : Formation continue sur les evolutions
 
 ## ð Checklist utilisateur
 
 ### Avant un incident
-- [ ] VÃ©rifier l'accÃ¨s Ã  l'application
+- [ ] Verifier l'acces a l'application
 - [ ] Valider les contacts dans l'annuaire
 - [ ] Tester les notifications
-- [ ] RÃ©viser les procÃ©dures d'urgence
+- [ ] Reviser les procedures d'urgence
 
 ### Pendant un incident
 - [ ] Documenter toutes les actions dans la main courante
-- [ ] Mettre Ã  jour rÃ©guliÃ¨rement le statut des actions
+- [ ] Mettre a jour regulierement le statut des actions
 - [ ] Communiquer les informations importantes
-- [ ] Respecter les prioritÃ©s et Ã©chÃ©ances
+- [ ] Respecter les priorites et echeances
 
-### AprÃ¨s un incident
-- [ ] ComplÃ©ter le RETEX
+### Apres un incident
+- [ ] Completer le RETEX
 - [ ] Archiver la documentation
-- [ ] Mettre Ã  jour les procÃ©dures
-- [ ] Planifier les actions d'amÃ©lioration
+- [ ] Mettre a jour les procedures
+- [ ] Planifier les actions d'amelioration
 
 ---
 
-**Important** : Cette application contient des informations sensibles de sÃ©curitÃ©. Respectez les consignes de confidentialitÃ© et de sÃ©curitÃ© de votre organisation.
+**Important** : Cette application contient des informations sensibles de securite. Respectez les consignes de confidentialite et de securite de votre organisation.

@@ -2,18 +2,18 @@
 
 ## Vue d'ensemble
 
-GestCyber Backend est une API REST sÃ©curisÃ©e dÃ©veloppÃ©e en Node.js avec Express.js, conÃ§ue pour gÃ©rer les crises cyber selon les recommandations de l'ANSSI. Le systÃ¨me implÃ©mente les quatre phases de gestion de crise cyber et offre une plateforme complÃ¨te de coordination des Ã©quipes de rÃ©ponse Ã  incident.
+GestCyber Backend est une API REST securisee developpee en Node.js avec Express.js, concue pour gerer les crises cyber selon les recommandations de l'ANSSI. Le systeme implemente les quatre phases de gestion de crise cyber et offre une plateforme complete de coordination des equipes de reponse a incident.
 
 ## Architecture
 
 ### Stack technologique
 - **Runtime** : Node.js 18+
 - **Framework** : Express.js 4.18+
-- **Base de donnÃ©es** : PostgreSQL 15+
+- **Base de donnees** : PostgreSQL 15+
 - **Cache** : Redis 7+
 - **ORM** : SQL natif avec pool de connexions
 - **Authentification** : JWT (JSON Web Tokens)
-- **SÃ©curitÃ©** : Helmet, CORS, Rate Limiting
+- **Securite** : Helmet, CORS, Rate Limiting
 - **Logs** : Winston
 - **Tests** : Jest + Supertest
 - **Conteneurisation** : Docker + Docker Compose
@@ -22,56 +22,56 @@ GestCyber Backend est une API REST sÃ©curisÃ©e dÃ©veloppÃ©e en Node.js a
 
 ```
 backend/
-âââ src/
-â   âââ controllers/          # Logique mÃ©tier des endpoints
-â   â   âââ incidentController.js
-â   â   âââ actionController.js
-â   â   âââ investigationController.js
-â   â   âââ communicationController.js
-â   â   âââ systemController.js
-â   â   âââ metricsController.js
-â   â   âââ retexController.js
-â   âââ routes/               # DÃ©finition des routes API
-â   â   âââ api/
-â   â   â   âââ incidents.js
-â   â   â   âââ actions.js
-â   â   â   âââ investigations.js
-â   â   â   âââ communications.js
-â   â   â   âââ systems.js
-â   â   â   âââ metrics.js
-â   â   â   âââ retex.js
-â   â   âââ index.js
-â   âââ middleware/           # Middleware Express
-â   â   âââ auth.js          # Authentification JWT
-â   â   âââ validation.js    # Validation des donnÃ©es
-â   â   âââ logging.js       # Logs des requÃªtes
-â   â   âââ errorHandler.js  # Gestion d'erreurs
-â   âââ services/            # Services mÃ©tier
-â   â   âââ authService.js
-â   â   âââ alertService.js
-â   â   âââ notificationService.js
-â   â   âââ reportService.js
-â   â   âââ metricsService.js
-â   âââ utils/               # Utilitaires
-â   â   âââ database.js
-â   â   âââ logger.js
-â   â   âââ constants.js
-â   â   âââ validators.js
-â   âââ config/              # Configuration
-â   â   âââ database.js
-â   â   âââ auth.js
-â   â   âââ app.js
-â   âââ app.js               # Point d'entrÃ©e
-âââ scripts/                 # Scripts utilitaires
-â   âââ migrate.js
-â   âââ seed.js
-â   âââ backup.js
-âââ tests/                   # Tests automatisÃ©s
-âââ docs/                    # Documentation
-âââ package.json
-âââ Dockerfile
-âââ docker-compose.yml
-âââ README.md
+ââ🏾â🏾 src/
+â   â🏾â🏾â🏾 controllers/          # Logique metier des endpoints
+â   â🏾   â🏾â🏾â🏾 incidentController.js
+â🏾   â🏾   â🏾â🏾â🏾 actionController.js
+â🏾   â🏾   â🏾â🏾â🏾 investigationController.js
+â🏾   â🏾   â🏾â🏾â🏾 communicationController.js
+â🏾   â🏾   â🏾â🏾â🏾 systemController.js
+â🏾   â🏾   â🏾â🏾â🏾 metricsController.js
+â🏾   â🏾   â🏾â🏾â🏾 retexController.js
+â🏾   â🏾â🏾â🏾 routes/               # Definition des routes API
+â🏾   â🏾   â🏾â🏾â🏾 api/
+â🏾   â🏾   â🏾   â🏾â🏾â🏾 incidents.js
+â🏾   â🏾   â🏾   â🏾â🏾â🏾 actions.js
+â🏾   â🏾   â🏾   â🏾â🏾â🏾 investigations.js
+â🏾   â🏾   â🏾   â🏾â🏾â🏾 communications.js
+â🏾   â🏾   â🏾   â🏾â🏾â🏾 systems.js
+â🏾   â🏾   â🏾   â🏾â🏾â🏾 metrics.js
+â🏾   â🏾   â🏾   â🏾â🏾â🏾 retex.js
+â🏾   â🏾   â🏾â🏾â🏾 index.js
+â🏾   â🏾â🏾â🏾 middleware/           # Middleware Express
+â🏾   â🏾   â🏾â🏾â🏾 auth.js          # Authentification JWT
+â🏾   â🏾   â🏾â🏾â🏾 validation.js    # Validation des donnees
+â🏾   â🏾   â🏾â🏾â🏾 logging.js       # Logs des requetes
+â🏾   â🏾   â🏾â🏾â🏾 errorHandler.js  # Gestion d'erreurs
+â🏾   â🏾â🏾â🏾 services/            # Services metier
+â🏾   â🏾   â🏾â🏾â🏾 authService.js
+â🏾   â🏾   â🏾â🏾â🏾 alertService.js
+â🏾   â🏾   â🏾â🏾â🏾 notificationService.js
+â🏾   â🏾   â🏾â🏾â🏾 reportService.js
+â🏾   â🏾   â🏾â🏾â🏾 metricsService.js
+â🏾   â🏾â🏾â🏾 utils/               # Utilitaires
+â🏾   â🏾   â🏾â🏾â🏾 database.js
+â🏾   â🏾   â🏾â🏾â🏾 logger.js
+â🏾   â🏾   â🏾â🏾â🏾 constants.js
+â🏾   â🏾   â🏾â🏾â🏾 validators.js
+â🏾   â🏾â🏾â🏾 config/              # Configuration
+â🏾   â🏾   â🏾â🏾â🏾 database.js
+â🏾   â🏾   â🏾â🏾â🏾 auth.js
+â🏾   â🏾   â🏾â🏾â🏾 app.js
+â🏾   â🏾â🏾â🏾 app.js               # Point d'entree
+â🏾â🏾â🏾 scripts/                 # Scripts utilitaires
+â🏾   â🏾â🏾â🏾 migrate.js
+â🏾   â🏾â🏾â🏾 seed.js
+â🏾   â🏾â🏾â🏾 backup.js
+â🏾â🏾â🏾 tests/                   # Tests automatises
+â🏾â🏾â🏾 docs/                    # Documentation
+â🏾â🏾â🏾 package.json
+â🏾â🏾â🏾 Dockerfile
+â🏾â🏾â🏾 docker-compose.yml
+â🏾â🏾â🏾 README.md
 ```
 
 ## API Endpoints
@@ -79,114 +79,114 @@ backend/
 ### Authentification
 ```
 POST   /api/auth/login           # Connexion utilisateur
-POST   /api/auth/logout          # DÃ©connexion
+POST   /api/auth/logout          # Deconnexion
 POST   /api/auth/refresh         # Renouvellement token
 GET    /api/auth/me              # Profil utilisateur actuel
 ```
 
 ### Gestion des incidents
 ```
-POST   /api/incidents            # CrÃ©er un incident
+POST   /api/incidents            # Creer un incident
 GET    /api/incidents            # Liste des incidents (avec pagination)
-GET    /api/incidents/:id        # DÃ©tails d'un incident
+GET    /api/incidents/:id        # Details d'un incident
 PUT    /api/incidents/:id        # Modifier un incident
 DELETE /api/incidents/:id        # Fermer un incident
 PATCH  /api/incidents/:id/phase  # Changer de phase
 GET    /api/incidents/:id/timeline     # Chronologie
-GET    /api/incidents/:id/metrics      # MÃ©triques
+GET    /api/incidents/:id/metrics      # Metriques
 POST   /api/incidents/:id/escalate     # Escalader
 ```
 
 ### Gestion des actions
 ```
-POST   /api/actions              # CrÃ©er une action
+POST   /api/actions              # Creer une action
 GET    /api/incidents/:id/actions     # Actions d'un incident
-GET    /api/actions/:id          # DÃ©tails d'une action
+GET    /api/actions/:id          # Details d'une action
 PUT    /api/actions/:id          # Modifier une action
 PATCH  /api/actions/:id/assign   # Assigner une action
-PATCH  /api/actions/:id/complete # Marquer comme terminÃ©e
+PATCH  /api/actions/:id/complete # Marquer comme terminee
 POST   /api/actions/:id/escalate # Escalader une action
 GET    /api/actions/kpis         # KPIs des actions
 ```
 
-### Investigation numÃ©rique
+### Investigation numerique
 ```
-POST   /api/investigations       # CrÃ©er une investigation
-GET    /api/investigations/:id   # DÃ©tails investigation
-PUT    /api/investigations/:id/iocs    # Mettre Ã  jour IoCs
+POST   /api/investigations       # Creer une investigation
+GET    /api/investigations/:id   # Details investigation
+PUT    /api/investigations/:id/iocs    # Mettre a jour IoCs
 PATCH  /api/investigations/:id/finalize # Finaliser
-GET    /api/investigations/:id/evidence # Preuves collectÃ©es
-POST   /api/investigations/:id/report   # GÃ©nÃ©rer rapport
+GET    /api/investigations/:id/evidence # Preuves collectees
+POST   /api/investigations/:id/report   # Generer rapport
 ```
 
 ### Communications
 ```
-POST   /api/communications       # CrÃ©er une communication
+POST   /api/communications       # Creer une communication
 GET    /api/communications       # Liste des communications
-GET    /api/communications/:id   # DÃ©tails communication
+GET    /api/communications/:id   # Details communication
 PUT    /api/communications/:id   # Modifier communication
 POST   /api/communications/:id/send     # Envoyer
 GET    /api/communications/templates    # Templates disponibles
 ```
 
-### SystÃ¨mes et actifs
+### Systemes et actifs
 ```
-GET    /api/systems              # Liste des systÃ¨mes
-POST   /api/systems              # Ajouter un systÃ¨me
-GET    /api/systems/:id          # DÃ©tails systÃ¨me
-PUT    /api/systems/:id          # Modifier systÃ¨me
+GET    /api/systems              # Liste des systemes
+POST   /api/systems              # Ajouter un systeme
+GET    /api/systems/:id          # Details systeme
+PUT    /api/systems/:id          # Modifier systeme
 PATCH  /api/systems/:id/status   # Changer statut
-GET    /api/systems/:id/dependencies    # DÃ©pendances
+GET    /api/systems/:id/dependencies    # Dependances
 ```
 
 ### Reconstruction
 ```
 GET    /api/reconstructions      # Plans de reconstruction
-POST   /api/reconstructions      # CrÃ©er plan reconstruction
-GET    /api/reconstructions/:id  # DÃ©tails plan
+POST   /api/reconstructions      # Creer plan reconstruction
+GET    /api/reconstructions/:id  # Details plan
 PUT    /api/reconstructions/:id  # Modifier plan
-PATCH  /api/reconstructions/:id/start   # DÃ©marrer reconstruction
+PATCH  /api/reconstructions/:id/start   # Demarrer reconstruction
 PATCH  /api/reconstructions/:id/complete # Finaliser reconstruction
 ```
 
-### MÃ©triques et rapports
+### Metriques et rapports
 ```
-GET    /api/metrics              # MÃ©triques gÃ©nÃ©rales
-GET    /api/metrics/incidents    # MÃ©triques par incident
-GET    /api/metrics/teams        # Performance des Ã©quipes
+GET    /api/metrics              # Metriques generales
+GET    /api/metrics/incidents    # Metriques par incident
+GET    /api/metrics/teams        # Performance des equipes
 GET    /api/reports              # Liste des rapports
-POST   /api/reports/generate     # GÃ©nÃ©rer rapport
-GET    /api/reports/:id/download # TÃ©lÃ©charger rapport
+POST   /api/reports/generate     # Generer rapport
+GET    /api/reports/:id/download # Telecharger rapport
 ```
 
 ### RETEX
 ```
-POST   /api/retex                # CrÃ©er RETEX
+POST   /api/retex                # Creer RETEX
 GET    /api/retex                # Liste RETEX
-GET    /api/retex/:id            # DÃ©tails RETEX
+GET    /api/retex/:id            # Details RETEX
 PUT    /api/retex/:id            # Modifier RETEX
 PATCH  /api/retex/:id/finalize   # Finaliser RETEX
 ```
 
-## SÃ©curitÃ©
+## Securite
 
 ### Authentification et autorisation
 - **JWT** : Tokens avec expiration configurable
 - **Hachage** : Mots de passe avec bcrypt (12 rounds)
-- **RBAC** : ContrÃ´le d'accÃ¨s basÃ© sur les rÃ´les
-- **2FA** : Support de l'authentification Ã  deux facteurs (optionnel)
+- **RBAC** : Controle d'acces base sur les roles
+- **2FA** : Support de l'authentification a deux facteurs (optionnel)
 
 ### Protection des endpoints
-- **Rate Limiting** : 100 requÃªtes/15 minutes par IP
+- **Rate Limiting** : 100 requetes/15 minutes par IP
 - **CORS** : Configuration restrictive
-- **Helmet** : Headers de sÃ©curitÃ© HTTP
-- **Validation** : Validation stricte des entrÃ©es avec Joi
-- **SQL Injection** : RequÃªtes paramÃ©trÃ©es uniquement
+- **Helmet** : Headers de securite HTTP
+- **Validation** : Validation stricte des entrees avec Joi
+- **SQL Injection** : Requetes parametrees uniquement
 
 ### Audit et logs
-- **Winston** : Logs structurÃ©s avec niveaux
-- **Audit Trail** : TraÃ§abilitÃ© de toutes les actions
-- **Monitoring** : MÃ©triques de performance et santÃ©
+- **Winston** : Logs structures avec niveaux
+- **Audit Trail** : Tracabilite de toutes les actions
+- **Monitoring** : Metriques de performance et sante
 
 ## Configuration
 
@@ -196,7 +196,7 @@ PATCH  /api/retex/:id/finalize   # Finaliser RETEX
 NODE_ENV=production
 PORT=5000
 
-# Base de donnÃ©es
+# Base de donnees
 DB_HOST=localhost
 DB_PORT=5432
 DB_NAME=gestcyber
@@ -221,12 +221,12 @@ SLACK_BOT_TOKEN=...
 ### Niveaux de logs
 - **error** : Erreurs critiques
 - **warn** : Avertissements
-- **info** : Informations gÃ©nÃ©rales
-- **debug** : Informations de dÃ©bogage
+- **info** : Informations generales
+- **debug** : Informations de debogage
 
-## DÃ©ploiement
+## Deploiement
 
-### PrÃ©requis
+### Prerequis
 - Node.js 18+
 - PostgreSQL 15+
 - Redis 7+
@@ -238,39 +238,39 @@ SLACK_BOT_TOKEN=...
 git clone https://github.com/your-org/gestcyber-backend.git
 cd gestcyber-backend
 
-# Installer les dÃ©pendances
+# Installer les dependances
 npm install
 
 # Configurer l'environnement
 cp .env.example .env
-# Ãditer .env avec vos valeurs
+# Editer .env avec vos valeurs
 
-# CrÃ©er la base de donnÃ©es
+# Creer la base de donnees
 npm run db:migrate
 
-# InsÃ©rer les donnÃ©es de test
+# Inserer les donnees de test
 npm run db:seed
 
-# DÃ©marrer en mode dÃ©veloppement
+# Demarrer en mode developpement
 npm run dev
 
 # Ou en mode production
 npm start
 ```
 
-### DÃ©ploiement Docker
+### Deploiement Docker
 ```bash
-# Construire et dÃ©marrer les services
+# Construire et demarrer les services
 docker-compose up -d
 
-# VÃ©rifier l'Ã©tat des services
+# Verifier l'etat des services
 docker-compose ps
 
 # Voir les logs
 docker-compose logs -f backend
 ```
 
-### DÃ©ploiement production
+### Deploiement production
 ```bash
 # Build de l'image
 docker build -t gestcyber-backend:latest .
@@ -286,26 +286,26 @@ docker push registry.example.com/gestcyber-backend:latest
 
 ### Health checks
 ```bash
-# SantÃ© de l'API
+# Sante de l'API
 curl http://localhost:5000/health
 
-# SantÃ© de la base de donnÃ©es
+# Sante de la base de donnees
 curl http://localhost:5000/health/db
 
-# MÃ©triques Prometheus
+# Metriques Prometheus
 curl http://localhost:9090/metrics
 ```
 
 ### Logs
 ```bash
-# Logs en temps rÃ©el
+# Logs en temps reel
 docker-compose logs -f backend
 
-# Logs spÃ©cifiques
+# Logs specifiques
 tail -f logs/gestcyber.log | grep ERROR
 ```
 
-### Sauvegarde base de donnÃ©es
+### Sauvegarde base de donnees
 ```bash
 # Sauvegarde manuelle
 npm run db:backup
@@ -327,21 +327,21 @@ npm run test:coverage
 # Tests en mode watch
 npm run test:watch
 
-# Tests d'intÃ©gration
+# Tests d'integration
 npm run test:integration
 ```
 
 ### Structure des tests
 ```
 tests/
-âââ unit/                    # Tests unitaires
-â   âââ controllers/
-â   âââ services/
-â   âââ utils/
-âââ integration/             # Tests d'intÃ©gration
-â   âââ api/
-â   âââ database/
-âââ fixtures/                # DonnÃ©es de test
+ââ🏾â🏾 unit/                    # Tests unitaires
+â🏾   â🏾â🏾â🏾 controllers/
+â🏾   â🏾â🏾â🏾 services/
+â🏾   â🏾â🏾â🏾 utils/
+â🏾â🏾â🏾 integration/             # Tests d'integration
+â🏾   â🏾â🏾â🏾 api/
+â🏾   â🏾â🏾â🏾 database/
+â🏾â🏾â🏾 fixtures/                # Donnees de test
 ```
 
 ## Contribution
@@ -352,35 +352,35 @@ tests/
 - **Commits** : Convention Conventional Commits
 - **Branches** : GitFlow
 
-### Workflow de dÃ©veloppement
-1. CrÃ©er une branche feature
-2. DÃ©velopper et tester
+### Workflow de developpement
+1. Creer une branche feature
+2. Developper et tester
 3. Soumettre une Pull Request
 4. Review de code
-5. Tests automatisÃ©s
+5. Tests automatises
 6. Merge vers develop
 
-## Support et dÃ©pannage
+## Support et depannage
 
 ### Erreurs communes
 
 **Erreur de connexion DB**
 ```bash
-# VÃ©rifier que PostgreSQL fonctionne
+# Verifier que PostgreSQL fonctionne
 docker-compose ps postgres
 
-# VÃ©rifier les logs
+# Verifier les logs
 docker-compose logs postgres
 ```
 
-**ProblÃ¨me de permissions**
+**Probleme de permissions**
 ```bash
-# VÃ©rifier les permissions utilisateur
+# Verifier les permissions utilisateur
 ls -la logs/
 chmod 755 logs/
 ```
 
-**MÃ©moire insuffisante**
+**Memoire insuffisante**
 ```bash
 # Augmenter la limite Node.js
 node --max-old-space-size=4096 src/app.js
