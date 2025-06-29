@@ -1,16 +1,16 @@
-# Guide de DÃ©marrage Rapide - GestCyber Backend
+# Guide de Demarrage Rapide - GestCyber Backend
 
 ## Vue d'ensemble
 
-Ce guide vous permet de dÃ©ployer rapidement l'infrastructure backend de GestCyber, le systÃ¨me de gestion de crise cyber conforme aux recommandations ANSSI.
+Ce guide vous permet de deployer rapidement l'infrastructure backend de GestCyber, le systeme de gestion de crise cyber conforme aux recommandations ANSSI.
 
-## PrÃ©requis
+## Prerequis
 
-### SystÃ¨me
+### Systeme
 - **OS** : Linux (Ubuntu 20.04+), macOS, ou Windows avec WSL2
-- **RAM** : Minimum 4 GB, recommandÃ© 8 GB
+- **RAM** : Minimum 4 GB, recommande 8 GB
 - **Disque** : Minimum 20 GB d'espace libre
-- **RÃ©seau** : AccÃ¨s Internet pour tÃ©lÃ©charger les dÃ©pendances
+- **Reseau** : Acces Internet pour telecharger les dependances
 
 ### Logiciels requis
 ```bash
@@ -40,13 +40,13 @@ cd gestcyber-backend
 # Copier le fichier d'environnement
 cp .env.example .env
 
-# Ãditer les variables d'environnement
+# Editer les variables d'environnement
 nano .env
 ```
 
-**Variables critiques Ã  modifier :**
+**Variables critiques a modifier :**
 ```env
-# Mots de passe sÃ©curisÃ©s
+# Mots de passe securises
 DB_PASSWORD=your_secure_db_password_123!
 REDIS_PASSWORD=your_secure_redis_password_456!
 JWT_SECRET=your_very_long_jwt_secret_key_at_least_64_characters_long_789!
@@ -59,39 +59,39 @@ TWILIO_ACCOUNT_SID=your_twilio_sid
 SENDGRID_API_KEY=your_sendgrid_key
 ```
 
-### 3. DÃ©marrage
+### 3. Demarrage
 ```bash
-# Construction et dÃ©marrage des services
+# Construction et demarrage des services
 docker-compose up -d
 
-# VÃ©rification du statut
+# Verification du statut
 docker-compose ps
 
-# VÃ©rification des logs
+# Verification des logs
 docker-compose logs -f backend
 ```
 
-### 4. Initialisation de la base de donnÃ©es
+### 4. Initialisation de la base de donnees
 ```bash
-# ExÃ©cution des migrations
+# Execution des migrations
 docker-compose exec backend npm run db:migrate
 
-# Insertion des donnÃ©es de test
+# Insertion des donnees de test
 docker-compose exec backend npm run db:seed
 ```
 
-### 5. VÃ©rification
+### 5. Verification
 ```bash
-# Test de santÃ© de l'API
+# Test de sante de l'API
 curl http://localhost:5000/health
 
-# Test de connexion base de donnÃ©es
+# Test de connexion base de donnees
 curl http://localhost:5000/health/db
 ```
 
-## Installation Manuelle (DÃ©veloppement)
+## Installation Manuelle (Developpement)
 
-### 1. Installation des dÃ©pendances
+### 1. Installation des dependances
 ```bash
 # Installation des paquets Node.js
 npm install
@@ -103,12 +103,12 @@ sudo apt-get install postgresql postgresql-contrib
 sudo apt-get install redis-server
 ```
 
-### 2. Configuration de la base de donnÃ©es
+### 2. Configuration de la base de donnees
 ```bash
-# Connexion Ã  PostgreSQL
+# Connexion a PostgreSQL
 sudo -u postgres psql
 
-# CrÃ©ation de la base et de l'utilisateur
+# Creation de la base et de l'utilisateur
 CREATE DATABASE gestcyber;
 CREATE USER gestcyber_user WITH PASSWORD 'your_password';
 GRANT ALL PRIVILEGES ON DATABASE gestcyber TO gestcyber_user;
@@ -117,7 +117,7 @@ GRANT ALL PRIVILEGES ON DATABASE gestcyber TO gestcyber_user;
 
 ### 3. Configuration de Redis
 ```bash
-# DÃ©marrage de Redis
+# Demarrage de Redis
 sudo systemctl start redis-server
 sudo systemctl enable redis-server
 
@@ -132,16 +132,16 @@ sudo systemctl restart redis-server
 cp .env.example .env
 nano .env
 
-# Migration de la base de donnÃ©es
+# Migration de la base de donnees
 npm run db:migrate
 
-# DonnÃ©es de test
+# Donnees de test
 npm run db:seed
 ```
 
-### 5. DÃ©marrage en dÃ©veloppement
+### 5. Demarrage en developpement
 ```bash
-# Mode dÃ©veloppement avec rechargement automatique
+# Mode developpement avec rechargement automatique
 npm run dev
 
 # Ou mode production
@@ -150,9 +150,9 @@ npm start
 
 ## Configuration de Production
 
-### 1. SÃ©curitÃ© SSL/TLS
+### 1. Securite SSL/TLS
 ```bash
-# GÃ©nÃ©ration des certificats SSL (exemple avec Let's Encrypt)
+# Generation des certificats SSL (exemple avec Let's Encrypt)
 sudo apt-get install certbot
 sudo certbot certonly --standalone -d gestcyber.your-domain.com
 
@@ -164,10 +164,10 @@ sudo nginx -t && sudo systemctl reload nginx
 
 ### 2. Monitoring et alertes
 ```bash
-# DÃ©marrage avec monitoring complet
+# Demarrage avec monitoring complet
 docker-compose --profile full up -d
 
-# AccÃ¨s aux interfaces
+# Acces aux interfaces
 # Grafana: http://localhost:3001 (admin/admin123)
 # Prometheus: http://localhost:9091
 # Kibana: http://localhost:5601
@@ -182,20 +182,20 @@ docker-compose --profile backup up -d
 docker-compose exec backup /backup.sh
 ```
 
-### 4. Mise Ã  l'Ã©chelle
+### 4. Mise a l'echelle
 ```bash
-# DÃ©marrage avec plusieurs instances backend
+# Demarrage avec plusieurs instances backend
 docker-compose up -d --scale backend=3
 ```
 
 ## Tests et Validation
 
-### 1. Tests automatisÃ©s
+### 1. Tests automatises
 ```bash
 # Tests unitaires
 npm test
 
-# Tests d'intÃ©gration
+# Tests d'integration
 npm run test:integration
 
 # Couverture de code
@@ -211,21 +211,21 @@ npm install -g artillery
 artillery quick --count 100 --num 10 http://localhost:5000/health
 ```
 
-### 3. Tests de sÃ©curitÃ©
+### 3. Tests de securite
 ```bash
-# Audit des vulnÃ©rabilitÃ©s
+# Audit des vulnerabilites
 npm audit
 
-# Scan de sÃ©curitÃ© Docker
+# Scan de securite Docker
 docker run --rm -v /var/run/docker.sock:/var/run/docker.sock \
   -v $PWD:/root/.cache/ aquasec/trivy image gestcyber-backend
 ```
 
-## OpÃ©rations Courantes
+## Operations Courantes
 
 ### Gestion des logs
 ```bash
-# Voir les logs en temps rÃ©el
+# Voir les logs en temps reel
 docker-compose logs -f backend
 
 # Logs par service
@@ -245,36 +245,36 @@ docker-compose exec postgres pg_dump -U gestcyber_user gestcyber > backup_$(date
 docker-compose exec -T postgres psql -U gestcyber_user gestcyber < backup_20240613.sql
 ```
 
-### Mise Ã  jour
+### Mise a jour
 ```bash
-# ArrÃªt des services
+# Arret des services
 docker-compose down
 
-# Mise Ã  jour du code
+# Mise a jour du code
 git pull origin main
 
-# Reconstruction et redÃ©marrage
+# Reconstruction et redemarrage
 docker-compose build --no-cache
 docker-compose up -d
 
-# Migration si nÃ©cessaire
+# Migration si necessaire
 docker-compose exec backend npm run db:migrate
 ```
 
-## DÃ©pannage
+## Depannage
 
-### ProblÃ¨mes courants
+### Problemes courants
 
-**Erreur de connexion base de donnÃ©es**
+**Erreur de connexion base de donnees**
 ```bash
-# VÃ©rifier que PostgreSQL fonctionne
+# Verifier que PostgreSQL fonctionne
 docker-compose logs postgres
 
 # Tester la connexion
 docker-compose exec postgres psql -U gestcyber_user -d gestcyber -c "SELECT version();"
 ```
 
-**ProblÃ¨me de mÃ©moire**
+**Probleme de memoire**
 ```bash
 # Augmenter la limite Node.js
 export NODE_OPTIONS="--max-old-space-size=4096"
@@ -295,48 +295,48 @@ sudo usermod -aG docker $USER
 newgrp docker
 ```
 
-### VÃ©rifications de santÃ©
+### Verifications de sante
 ```bash
 # API principale
 curl -f http://localhost:5000/health || echo "Backend KO"
 
-# Base de donnÃ©es
+# Base de donnees
 curl -f http://localhost:5000/health/db || echo "Database KO"
 
 # Redis
 redis-cli -a your_redis_password ping || echo "Redis KO"
 
-# MÃ©triques
+# Metriques
 curl -f http://localhost:9090/metrics || echo "Metrics KO"
 ```
 
 ## Configuration des Services Externes
 
 ### Twilio (SMS)
-1. CrÃ©er un compte sur [twilio.com](https://twilio.com)
-2. Obtenir : Account SID, Auth Token, numÃ©ro de tÃ©lÃ©phone
+1. Creer un compte sur [twilio.com](https://twilio.com)
+2. Obtenir : Account SID, Auth Token, numero de telephone
 3. Configurer dans `.env`
 
 ### SendGrid (Email)
-1. CrÃ©er un compte sur [sendgrid.com](https://sendgrid.com)
-2. GÃ©nÃ©rer une clÃ© API
+1. Creer un compte sur [sendgrid.com](https://sendgrid.com)
+2. Generer une cle API
 3. Configurer dans `.env`
 
 ### Slack
-1. CrÃ©er une app Slack
+1. Creer une app Slack
 2. Obtenir le Bot Token
-3. CrÃ©er un Webhook URL
+3. Creer un Webhook URL
 4. Configurer dans `.env`
 
-## Prochaines Ãtapes
+## Prochaines Etapes
 
-### 1. Configuration avancÃ©e
+### 1. Configuration avancee
 - [ ] Configurer le monitoring complet
 - [ ] Mettre en place les alertes automatiques
 - [ ] Configurer les sauvegardes distantes
-- [ ] ImplÃ©menter l'authentification SSO
+- [ ] Implementer l'authentification SSO
 
-### 2. IntÃ©grations
+### 2. Integrations
 - [ ] SIEM (Splunk, QRadar, etc.)
 - [ ] MISP pour la threat intelligence
 - [ ] Active Directory pour l'authentification
@@ -345,8 +345,8 @@ curl -f http://localhost:9090/metrics || echo "Metrics KO"
 ### 3. Personnalisation
 - [ ] Adapter les workflows aux processus internes
 - [ ] Customiser les templates de communication
-- [ ] Ajouter des mÃ©triques spÃ©cifiques
-- [ ] DÃ©velopper des rapports personnalisÃ©s
+- [ ] Ajouter des metriques specifiques
+- [ ] Developper des rapports personnalises
 
 ## Support et Ressources
 
@@ -367,6 +367,6 @@ curl -f http://localhost:9090/metrics || echo "Metrics KO"
 
 ---
 
-**FÃ©licitations !** Votre infrastructure GestCyber Backend est maintenant opÃ©rationnelle. 
+**Felicitations !** Votre infrastructure GestCyber Backend est maintenant operationnelle.
 
-Pour toute question ou assistance, n'hÃ©sitez pas Ã  contacter notre Ã©quipe support.
+Pour toute question ou assistance, n'hesitez pas a contacter notre equipe support.
