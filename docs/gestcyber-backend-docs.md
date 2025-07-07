@@ -22,56 +22,56 @@ GestCyber Backend est une API REST securisee developpee en Node.js avec Express.
 
 ```
 backend/
-ââ🏾â🏾 src/
-â   â🏾â🏾â🏾 controllers/          # Logique metier des endpoints
-â   â🏾   â🏾â🏾â🏾 incidentController.js
-â🏾   â🏾   â🏾â🏾â🏾 actionController.js
-â🏾   â🏾   â🏾â🏾â🏾 investigationController.js
-â🏾   â🏾   â🏾â🏾â🏾 communicationController.js
-â🏾   â🏾   â🏾â🏾â🏾 systemController.js
-â🏾   â🏾   â🏾â🏾â🏾 metricsController.js
-â🏾   â🏾   â🏾â🏾â🏾 retexController.js
-â🏾   â🏾â🏾â🏾 routes/               # Definition des routes API
-â🏾   â🏾   â🏾â🏾â🏾 api/
-â🏾   â🏾   â🏾   â🏾â🏾â🏾 incidents.js
-â🏾   â🏾   â🏾   â🏾â🏾â🏾 actions.js
-â🏾   â🏾   â🏾   â🏾â🏾â🏾 investigations.js
-â🏾   â🏾   â🏾   â🏾â🏾â🏾 communications.js
-â🏾   â🏾   â🏾   â🏾â🏾â🏾 systems.js
-â🏾   â🏾   â🏾   â🏾â🏾â🏾 metrics.js
-â🏾   â🏾   â🏾   â🏾â🏾â🏾 retex.js
-â🏾   â🏾   â🏾â🏾â🏾 index.js
-â🏾   â🏾â🏾â🏾 middleware/           # Middleware Express
-â🏾   â🏾   â🏾â🏾â🏾 auth.js          # Authentification JWT
-â🏾   â🏾   â🏾â🏾â🏾 validation.js    # Validation des donnees
-â🏾   â🏾   â🏾â🏾â🏾 logging.js       # Logs des requetes
-â🏾   â🏾   â🏾â🏾â🏾 errorHandler.js  # Gestion d'erreurs
-â🏾   â🏾â🏾â🏾 services/            # Services metier
-â🏾   â🏾   â🏾â🏾â🏾 authService.js
-â🏾   â🏾   â🏾â🏾â🏾 alertService.js
-â🏾   â🏾   â🏾â🏾â🏾 notificationService.js
-â🏾   â🏾   â🏾â🏾â🏾 reportService.js
-â🏾   â🏾   â🏾â🏾â🏾 metricsService.js
-â🏾   â🏾â🏾â🏾 utils/               # Utilitaires
-â🏾   â🏾   â🏾â🏾â🏾 database.js
-â🏾   â🏾   â🏾â🏾â🏾 logger.js
-â🏾   â🏾   â🏾â🏾â🏾 constants.js
-â🏾   â🏾   â🏾â🏾â🏾 validators.js
-â🏾   â🏾â🏾â🏾 config/              # Configuration
-â🏾   â🏾   â🏾â🏾â🏾 database.js
-â🏾   â🏾   â🏾â🏾â🏾 auth.js
-â🏾   â🏾   â🏾â🏾â🏾 app.js
-â🏾   â🏾â🏾â🏾 app.js               # Point d'entree
-â🏾â🏾â🏾 scripts/                 # Scripts utilitaires
-â🏾   â🏾â🏾â🏾 migrate.js
-â🏾   â🏾â🏾â🏾 seed.js
-â🏾   â🏾â🏾â🏾 backup.js
-â🏾â🏾â🏾 tests/                   # Tests automatises
-â🏾â🏾â🏾 docs/                    # Documentation
-â🏾â🏾â🏾 package.json
-â🏾â🏾â🏾 Dockerfile
-â🏾â🏾â🏾 docker-compose.yml
-â🏾â🏾â🏾 README.md
+- src/
+  - controllers/          # Logique metier des endpoints
+    - incidentController.js
+    - actionController.js
+    - investigationController.js
+    - communicationController.js
+    - systemController.js
+    - metricsController.js
+    - retexController.js
+  - routes/               # Definition des routes API
+    - api/
+      - incidents.js
+      - actions.js
+      - investigations.js
+      - communications.js
+      - systems.js
+      - metrics.js
+      - retex.js
+    - index.js
+  - middleware/           # Middleware Express
+    - auth.js          # Authentification JWT
+    - validation.js    # Validation des donnees
+    - logging.js       # Logs des requetes
+    - errorHandler.js  # Gestion d'erreurs
+  - services/            # Services metier
+    - authService.js
+    - alertService.js
+    - notificationService.js
+    - reportService.js
+    - metricsService.js
+  - utils/               # Utilitaires
+    - database.js
+    - logger.js
+    - constants.js
+    - validators.js
+  - config/              # Configuration
+    - database.js
+    - auth.js
+    - app.js
+  - app.js               # Point d'entree
+- scripts/                 # Scripts utilitaires
+  - migrate.js
+  - seed.js
+  - backup.js
+- tests/                   # Tests automatises
+- docs/                    # Documentation
+- package.json
+- Dockerfile
+- docker-compose.yml
+- README.md
 ```
 
 ## API Endpoints
@@ -334,14 +334,14 @@ npm run test:integration
 ### Structure des tests
 ```
 tests/
-ââ🏾â🏾 unit/                    # Tests unitaires
-â🏾   â🏾â🏾â🏾 controllers/
-â🏾   â🏾â🏾â🏾 services/
-â🏾   â🏾â🏾â🏾 utils/
-â🏾â🏾â🏾 integration/             # Tests d'integration
-â🏾   â🏾â🏾â🏾 api/
-â🏾   â🏾â🏾â🏾 database/
-â🏾â🏾â🏾 fixtures/                # Donnees de test
+- unit/                    # Tests unitaires
+  - controllers/
+  - services/
+  - utils/
+- integration/             # Tests d'integration
+  - api/
+  - database/
+- fixtures/                # Donnees de test
 ```
 
 ## Contribution
