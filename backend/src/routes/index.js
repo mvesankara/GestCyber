@@ -1,34 +1,20 @@
 const express = require('express');
 const router = express.Router();
 
-// Routes API principales
+// Importer les routes
 router.use('/auth', require('./api/auth'));
+router.use('/gouvernance', require('./api/gouvernance'));
 router.use('/incidents', require('./api/incidents'));
-router.use('/actions', require('./api/actions'));
-// router.use('/investigations', require('./api/investigations'));
-// router.use('/communications', require('./api/communications'));
-// router.use('/systems', require('./api/systems'));
-// router.use('/metrics', require('./api/metrics'));
-// router.use('/retex', require('./api/retex'));
-router.use('/fil-evenements', require('./api/filEvenementsRoutes'));
 
-// Route de documentation API
+// Un point de terminaison de base pour vérifier que l'API est en ligne
 router.get('/', (req, res) => {
     res.json({
-        message: 'API GestCyber - Gestion de Crise Cyber',
-        version: '1.0.0',
+        message: 'API GestCyber est opérationnelle',
         endpoints: [
-            '/api/auth - Authentification',
-            '/api/incidents - Gestion des incidents',
-            '/api/actions - Gestion des actions',
-            // '/api/investigations - Investigation numérique',
-            // '/api/communications - Communications de crise',
-            // '/api/systems - Gestion des systèmes',
-            // '/api/metrics - Métriques et KPIs',
-            // '/api/retex - Retours d\'expérience',
-            '/api/fil-evenements - Fil des événements (Main Courante)'
-        ],
-        documentation: '/docs'
+            '/api/auth',
+            '/api/gouvernance',
+            '/api/incidents'
+        ]
     });
 });
 
