@@ -4,17 +4,21 @@ const helmet = require('helmet');
 const compression = require('compression');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
+const path = require('path');
 
-// Configuration
-require('dotenv').config();
+// Configuration - Point to the .env file at the project root
+// NOTE: The dotenv loading was not working as expected. Hardcoding the origin for now.
+require('dotenv').config({ path: path.resolve(__dirname, '../../.env') });
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware de sécurité
 app.use(helmet());
+
+// Hardcoded CORS configuration to fix the persistent issue
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: 'http://localhost', // Explicitly allow the frontend's origin
     credentials: true
 }));
 
