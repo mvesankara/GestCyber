@@ -7,73 +7,376 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <a href="#main-content" class="skip-link">Aller au contenu principal</a>
     <div class="app-container">
         <!-- Navigation latérale -->
-        <nav class="sidebar">
+        <nav class="sidebar" aria-label="Navigation principale">
             <div class="sidebar-header">
-                <h2>GestCyber</h2>
+                <button class="brand" data-page="accueil" aria-label="Revenir à l'accueil">
+                    <span class="brand__logo" aria-hidden="true">🛡️</span>
+                    <span class="brand__title">GestCyber</span>
+                </button>
             </div>
-            
+
             <ul class="nav-menu">
-                <li><a href="#dashboard" class="nav-link active" data-page="dashboard">📊 Dashboard</a></li>
+                <li><a href="#accueil" class="nav-link" data-page="accueil">🏠 Accueil</a></li>
+                <li><a href="#dashboard" class="nav-link" data-page="dashboard">📊 Tableau de bord</a></li>
                 <li><a href="#gouvernance" class="nav-link" data-page="gouvernance">🏛️ Gouvernance</a></li>
                 <li><a href="#actions" class="nav-link" data-page="actions">✔️ Actions</a></li>
                 <li><a href="#communication" class="nav-link" data-page="communication">💬 Communication</a></li>
                 <li><a href="#investigation" class="nav-link" data-page="investigation">🔍 Investigation</a></li>
                 <li><a href="#reconstruction" class="nav-link" data-page="reconstruction">🛠️ Reconstruction</a></li>
                 <li><a href="#reporting" class="nav-link" data-page="reporting">📈 Reporting</a></li>
+                <li><a href="#profil" class="nav-link" data-page="profil">👤 Profil</a></li>
+                <li><a href="#parametres" class="nav-link" data-page="parametres">⚙️ Paramètres</a></li>
+                <li><a href="#aide" class="nav-link" data-page="aide">❓ Aide</a></li>
             </ul>
-            
+
             <div class="sidebar-footer">
-                <div id="auth-buttons" style="display: flex; gap: 10px;">
-                    <button class="btn btn--primary btn--full-width" id="login-btn">Login</button>
-                    <button class="btn btn--secondary btn--full-width" id="register-btn">Register</button>
+                <div id="auth-buttons" class="sidebar-auth">
+                    <button class="btn btn--primary btn--full-width" id="login-btn">Connexion</button>
+                    <button class="btn btn--secondary btn--full-width" id="register-btn">Inscription</button>
                 </div>
-                <button class="btn btn--secondary btn--full-width" id="logout-btn" style="display: none; margin-top: 10px;">Logout</button>
-                <hr style="margin-top: 15px; margin-bottom: 15px; border-color: var(--color-border);">
-                <button class="btn btn--primary btn--full-width" id="new-incident-btn" disabled>🚨 Nouveau Incident</button>
+                <a href="#profil" class="sidebar-profile-link nav-link" data-page="profil" id="sidebar-profile-link" style="display:none;">Voir mon profil</a>
+                <button class="btn btn--secondary btn--full-width" id="logout-btn" style="display: none;">Déconnexion</button>
+                <hr class="sidebar-divider" aria-hidden="true">
+                <button class="btn btn--primary btn--full-width" id="new-incident-btn" disabled>🚨 Nouvel incident</button>
             </div>
         </nav>
 
-        <!-- Contenu principal -->
-        <main class="main-content">
-            <div id="dashboard" class="page active">
-                <!-- Le contenu du tableau de bord sera chargé par JS -->
-            </div>
-            <div id="gouvernance" class="page">
-                <div class="page-header">
-                    <h1>Checklist de Gouvernance</h1>
-                    <div class="form-group" style="min-width: 250px;">
-                        <label for="incident-selector" class="form-label">Sélectionner un incident :</label>
-                        <select id="incident-selector" class="form-control"></select>
+        <div class="content-area">
+            <header class="topbar" role="banner">
+                <div class="topbar__left">
+                    <button class="btn btn--ghost topbar__back" id="back-button" type="button" aria-label="Revenir à la page précédente">
+                        ← <span>Retour</span>
+                    </button>
+                    <nav class="breadcrumb" aria-label="Fil d'Ariane">
+                        <ol id="breadcrumb-list" class="breadcrumb__list"></ol>
+                    </nav>
+                </div>
+                <div class="topbar__right">
+                    <div class="topbar__actions" role="group" aria-label="Actions rapides">
+                        <button class="btn btn--secondary" id="quick-add-incident">+ Incident</button>
+                        <button class="btn btn--secondary" id="quick-export">⬇️ Exporter</button>
+                    </div>
+                    <div class="topbar__profile" id="topbar-profile">
+                        <img src="https://ui-avatars.com/api/?name=GC&background=21808D&color=fff" alt="Avatar de l'utilisateur" class="topbar__avatar" />
+                        <div class="topbar__identity">
+                            <span class="topbar__name" id="topbar-name">Invité</span>
+                            <a href="#profil" class="topbar__profile-link nav-link" data-page="profil">Voir le profil</a>
+                        </div>
                     </div>
                 </div>
-                <div id="checklist-container">
-                    <!-- La checklist sera générée ici par JavaScript -->
-                </div>
-            </div>
-            <div id="actions" class="page"></div>
-            <div id="communication" class="page"></div>
-            <div id="investigation" class="page"></div>
-            <div id="reconstruction" class="page"></div>
-            <div id="reporting" class="page"></div>
-        </main>
+            </header>
+
+            <!-- Contenu principal -->
+            <main id="main-content" class="main-content" tabindex="-1">
+                <section id="accueil" class="page" aria-labelledby="accueil-title">
+                    <div class="page-header">
+                        <div>
+                            <h1 id="accueil-title">Bienvenue sur GestCyber</h1>
+                            <p class="page-description">Pilotez vos incidents cyber et gardez le contrôle grâce à une plateforme claire et réactive.</p>
+                        </div>
+                    </div>
+                    <div class="welcome-grid">
+                        <article class="card card--highlight">
+                            <h2>🧭 Parcours guidé</h2>
+                            <p>Accédez rapidement aux étapes clés pour gérer la crise : gouvernance, actions, communication et plus encore.</p>
+                            <button class="btn btn--primary" data-page="dashboard" id="cta-go-dashboard">Accéder au tableau de bord</button>
+                        </article>
+                        <article class="card">
+                            <h2>🔐 Sécurité et conformité</h2>
+                            <p>Respectez les bonnes pratiques avec un suivi centralisé, des formulaires sécurisés et des indicateurs de conformité.</p>
+                        </article>
+                        <article class="card">
+                            <h2>🤝 Collaboration instantanée</h2>
+                            <p>Travaillez en équipe, suivez l'activité des membres et communiquez efficacement pendant l'incident.</p>
+                        </article>
+                    </div>
+                </section>
+
+                <section id="dashboard" class="page" aria-labelledby="dashboard-title">
+                    <div class="page-header">
+                        <div>
+                            <h1 id="dashboard-title">Tableau de bord</h1>
+                            <p class="page-description">Surveillez les indicateurs clés, agissez rapidement et gardez une vision claire de vos incidents.</p>
+                        </div>
+                        <div class="page-toolbar">
+                            <div class="search-field">
+                                <label for="dashboard-search" class="sr-only">Rechercher un incident</label>
+                                <input type="search" id="dashboard-search" class="form-control" placeholder="Rechercher un incident, une tâche..." aria-label="Rechercher dans le tableau de bord">
+                            </div>
+                            <div class="filters" role="group" aria-label="Filtres du tableau de bord">
+                                <label for="dashboard-status-filter" class="sr-only">Filtrer par statut</label>
+                                <select id="dashboard-status-filter" class="form-control">
+                                    <option value="all">Tous les statuts</option>
+                                    <option value="en_cours">En cours</option>
+                                    <option value="critique">Critique</option>
+                                    <option value="resolu">Résolu</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="dashboard-summary" class="dashboard-summary" role="region" aria-live="polite"></div>
+                    <div class="dashboard-panels">
+                        <section class="card" aria-labelledby="recent-incidents-title">
+                            <header class="card__header">
+                                <div>
+                                    <h2 id="recent-incidents-title">Incidents récents</h2>
+                                    <p class="card__description">Les derniers incidents signalés avec leur niveau de criticité.</p>
+                                </div>
+                                <button class="btn btn--ghost" id="dashboard-view-all">Tout voir</button>
+                            </header>
+                            <ul id="recent-incidents-list" class="list list--incidents"></ul>
+                        </section>
+                        <section class="card" aria-labelledby="activity-title">
+                            <header class="card__header">
+                                <div>
+                                    <h2 id="activity-title">Activité de l'équipe</h2>
+                                    <p class="card__description">Suivi chronologique des actions réalisées.</p>
+                                </div>
+                            </header>
+                            <ol id="activity-timeline" class="timeline"></ol>
+                        </section>
+                        <section class="card" aria-labelledby="notifications-title">
+                            <header class="card__header">
+                                <div>
+                                    <h2 id="notifications-title">Notifications</h2>
+                                    <p class="card__description">Alertes et recommandations importantes.</p>
+                                </div>
+                            </header>
+                            <ul id="notification-center" class="list list--notifications"></ul>
+                        </section>
+                    </div>
+                </section>
+
+                <section id="gouvernance" class="page" aria-labelledby="gouvernance-title">
+                    <div class="page-header">
+                        <div>
+                            <h1 id="gouvernance-title">Checklist de Gouvernance</h1>
+                            <p class="page-description">Suivez les étapes essentielles pour piloter la gouvernance de votre incident.</p>
+                        </div>
+                        <div class="form-group" style="min-width: 250px;">
+                            <label for="incident-selector" class="form-label">Sélectionner un incident :</label>
+                            <select id="incident-selector" class="form-control"></select>
+                        </div>
+                    </div>
+                    <div id="checklist-container" role="region" aria-live="polite"></div>
+                </section>
+
+                <section id="actions" class="page" aria-labelledby="actions-title">
+                    <div class="page-header">
+                        <div>
+                            <h1 id="actions-title">Plan d'actions</h1>
+                            <p class="page-description">Priorisez et assignez les tâches à réaliser pour contenir l'incident.</p>
+                        </div>
+                    </div>
+                    <div class="empty-state">
+                        <p>Connectez-vous pour afficher les actions assignées et les tâches à venir.</p>
+                    </div>
+                </section>
+
+                <section id="communication" class="page" aria-labelledby="communication-title">
+                    <div class="page-header">
+                        <div>
+                            <h1 id="communication-title">Communication</h1>
+                            <p class="page-description">Coordonnez la communication interne et externe pendant la crise.</p>
+                        </div>
+                    </div>
+                    <div class="empty-state">
+                        <p>Aucune communication publiée pour le moment.</p>
+                    </div>
+                </section>
+
+                <section id="investigation" class="page" aria-labelledby="investigation-title">
+                    <div class="page-header">
+                        <div>
+                            <h1 id="investigation-title">Investigation</h1>
+                            <p class="page-description">Analysez les causes, collectez les preuves et documentez vos découvertes.</p>
+                        </div>
+                    </div>
+                    <div class="empty-state">
+                        <p>Les détails d'investigation apparaîtront ici.</p>
+                    </div>
+                </section>
+
+                <section id="reconstruction" class="page" aria-labelledby="reconstruction-title">
+                    <div class="page-header">
+                        <div>
+                            <h1 id="reconstruction-title">Reconstruction</h1>
+                            <p class="page-description">Planifiez le retour à la normale et suivez les actions de remédiation.</p>
+                        </div>
+                    </div>
+                    <div class="empty-state">
+                        <p>Ajoutez un incident pour visualiser les plans de reconstruction associés.</p>
+                    </div>
+                </section>
+
+                <section id="reporting" class="page" aria-labelledby="reporting-title">
+                    <div class="page-header">
+                        <div>
+                            <h1 id="reporting-title">Reporting</h1>
+                            <p class="page-description">Préparez vos rapports, exports et indicateurs clés en quelques clics.</p>
+                        </div>
+                    </div>
+                    <div class="empty-state">
+                        <p>Générez un incident pour accéder aux rapports détaillés.</p>
+                    </div>
+                </section>
+
+                <section id="profil" class="page" aria-labelledby="profil-title">
+                    <div class="page-header">
+                        <div>
+                            <h1 id="profil-title">Mon profil</h1>
+                            <p class="page-description">Mettez à jour vos informations et consultez l'historique de vos actions.</p>
+                        </div>
+                        <button class="btn btn--primary" id="edit-profile-btn">Modifier le profil</button>
+                    </div>
+                    <div class="profile-layout">
+                        <aside class="profile-card" aria-label="Informations utilisateur">
+                            <img src="https://ui-avatars.com/api/?name=GC&background=21808D&color=fff" alt="Avatar du compte" class="profile-card__avatar" id="profile-avatar">
+                            <h2 class="profile-card__name" id="profile-name">Invité</h2>
+                            <p class="profile-card__role" id="profile-role">Utilisateur non authentifié</p>
+                            <p class="profile-card__contact"><span id="profile-email">—</span></p>
+                            <button class="btn btn--secondary btn--full-width" id="profile-logout-btn">Se déconnecter</button>
+                        </aside>
+                        <div class="profile-details">
+                            <section class="card" aria-labelledby="profile-info-title">
+                                <header class="card__header">
+                                    <h2 id="profile-info-title">Informations personnelles</h2>
+                                </header>
+                                <dl class="data-list" id="profile-info"></dl>
+                            </section>
+                            <section class="card" aria-labelledby="profile-activity-title">
+                                <header class="card__header">
+                                    <h2 id="profile-activity-title">Historique récent</h2>
+                                </header>
+                                <ul class="list list--activity" id="profile-activity"></ul>
+                            </section>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="parametres" class="page" aria-labelledby="parametres-title">
+                    <div class="page-header">
+                        <div>
+                            <h1 id="parametres-title">Paramètres</h1>
+                            <p class="page-description">Configurez vos préférences, notifications et options de sécurité.</p>
+                        </div>
+                    </div>
+                    <section class="card" aria-labelledby="preferences-title">
+                        <header class="card__header">
+                            <h2 id="preferences-title">Préférences d'affichage</h2>
+                        </header>
+                        <form class="settings-form">
+                            <div class="form-group">
+                                <label class="form-label" for="theme-toggle">Mode d'affichage</label>
+                                <select id="theme-toggle" class="form-control">
+                                    <option value="system">Selon le système</option>
+                                    <option value="light">Mode clair</option>
+                                    <option value="dark">Mode sombre</option>
+                                </select>
+                            </div>
+                            <div class="form-group form-group--inline">
+                                <div>
+                                    <input type="checkbox" id="notifications-toggle" class="form-checkbox">
+                                    <label for="notifications-toggle">Recevoir des notifications e-mail</label>
+                                </div>
+                                <p class="form-helper">Soyez averti en cas d'incident critique.</p>
+                            </div>
+                        </form>
+                    </section>
+                </section>
+
+                <section id="aide" class="page" aria-labelledby="aide-title">
+                    <div class="page-header">
+                        <div>
+                            <h1 id="aide-title">Centre d'aide</h1>
+                            <p class="page-description">Retrouvez les procédures, bonnes pratiques et contacts clés.</p>
+                        </div>
+                    </div>
+                    <section class="card" aria-labelledby="faq-title">
+                        <header class="card__header">
+                            <h2 id="faq-title">Questions fréquentes</h2>
+                        </header>
+                        <ul class="list list--faq">
+                            <li><strong>Comment déclarer un incident&nbsp;?</strong> Cliquez sur "Nouvel incident" et renseignez les informations demandées.</li>
+                            <li><strong>Qui contacter en cas d'urgence&nbsp;?</strong> Consultez la section Gouvernance pour connaître les responsables.</li>
+                            <li><strong>Comment exporter un rapport&nbsp;?</strong> Utilisez l'action rapide "Exporter" ou rendez-vous dans l'onglet Reporting.</li>
+                        </ul>
+                    </section>
+                </section>
+            </main>
+        </div>
     </div>
 
     <!-- Modals -->
-    <div id="login-modal" class="modal">
-        <div class="modal-content"><div class="modal-header"><h3>Connexion</h3><button class="modal-close" id="close-login-modal">&times;</button></div><div class="modal-body"><form id="login-form"><div id="login-error-message" class="form-error-message" style="display: none;"></div><div class="form-group"><label class="form-label" for="login-email">Email</label><input type="email" id="login-email" class="form-control" required></div><div class="form-group"><label class="form-label" for="login-password">Mot de passe</label><input type="password" id="login-password" class="form-control" required></div><div class="modal-actions"><button type="button" class="btn btn--secondary" id="cancel-login-modal">Annuler</button><button type="submit" class="btn btn--primary">Se connecter</button></div></form></div></div>
+    <div id="login-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="login-modal-title">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="login-modal-title">Connexion</h3>
+                <button class="modal-close" id="close-login-modal" aria-label="Fermer la fenêtre de connexion">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="login-form">
+                    <div id="login-error-message" class="form-error-message" style="display: none;"></div>
+                    <div class="form-group">
+                        <label class="form-label" for="login-email">Email</label>
+                        <input type="email" id="login-email" class="form-control" autocomplete="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="login-password">Mot de passe</label>
+                        <input type="password" id="login-password" class="form-control" autocomplete="current-password" required>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn--secondary" id="cancel-login-modal">Annuler</button>
+                        <button type="submit" class="btn btn--primary">Se connecter</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-    <div id="register-modal" class="modal">
-        <div class="modal-content"><div class="modal-header"><h3>Inscription</h3><button class="modal-close" id="close-register-modal">&times;</button></div><div class="modal-body"><form id="register-form"><div id="register-error-message" class="form-error-message" style="display: none;"></div><div class="form-group"><label class="form-label" for="register-nom">Nom</label><input type="text" id="register-nom" class="form-control" required></div><div class="form-group"><label class="form-label" for="register-prenom">Prénom</label><input type="text" id="register-prenom" class="form-control" required></div><div class="form-group"><label class="form-label" for="register-email">Email</label><input type="email" id="register-email" class="form-control" required></div><div class="form-group"><label class="form-label" for="register-password">Mot de passe</label><input type="password" id="register-password" class="form-control" required></div><div class="modal-actions"><button type="button" class="btn btn--secondary" id="cancel-register-modal">Annuler</button><button type="submit" class="btn btn--primary">S'inscrire</button></div></form></div></div>
+
+    <div id="register-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="register-modal-title">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="register-modal-title">Inscription</h3>
+                <button class="modal-close" id="close-register-modal" aria-label="Fermer la fenêtre d'inscription">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="register-form">
+                    <div id="register-error-message" class="form-error-message" style="display: none;"></div>
+                    <div class="form-group">
+                        <label class="form-label" for="register-nom">Nom</label>
+                        <input type="text" id="register-nom" class="form-control" autocomplete="family-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="register-prenom">Prénom</label>
+                        <input type="text" id="register-prenom" class="form-control" autocomplete="given-name" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="register-email">Email</label>
+                        <input type="email" id="register-email" class="form-control" autocomplete="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="register-password">Mot de passe</label>
+                        <input type="password" id="register-password" class="form-control" autocomplete="new-password" required>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn btn--secondary" id="cancel-register-modal">Annuler</button>
+                        <button type="submit" class="btn btn--primary">S'inscrire</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
     <!-- Modal Nouvel Incident -->
-    <div id="incident-modal" class="modal">
+    <div id="incident-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="incident-modal-title">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Déclarer un Nouvel Incident</h3>
-                <button class="modal-close" id="close-incident-modal">&times;</button>
+                <h3 id="incident-modal-title">Déclarer un Nouvel Incident</h3>
+                <button class="modal-close" id="close-incident-modal" aria-label="Fermer la fenêtre de création d'incident">&times;</button>
             </div>
             <div class="modal-body">
                 <form id="incident-form">
